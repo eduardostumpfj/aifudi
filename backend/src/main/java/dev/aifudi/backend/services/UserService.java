@@ -3,11 +3,10 @@ package dev.aifudi.backend.services;
 import dev.aifudi.backend.dtos.UserRegisterRequestDTO;
 import dev.aifudi.backend.entities.Address;
 import dev.aifudi.backend.entities.User;
-import dev.aifudi.backend.repositories.AddressRepository;
 import dev.aifudi.backend.repositories.AddressRepositoryImp;
 import dev.aifudi.backend.repositories.RoleRepositoryImp;
 import dev.aifudi.backend.repositories.UserRepositoryImp;
-import dev.aifudi.backend.services.exceptions.ResourceNotFoundException;
+import dev.aifudi.backend.services.exceptions.InvalidRegisterException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +33,7 @@ public class UserService {
         // Find Role
         var role = this.roleRepositoryImp.findRoleByName(user.roleName());
         if(role.isEmpty()){
-            throw new ResourceNotFoundException("Invalid Role: " + user.roleName());
+            throw new InvalidRegisterException("Role", "Invalid Role");
         }
         logger.info("Role_Id Encontrado");
 
