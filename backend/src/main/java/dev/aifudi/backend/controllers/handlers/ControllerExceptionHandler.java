@@ -2,6 +2,7 @@ package dev.aifudi.backend.controllers.handlers;
 
 import dev.aifudi.backend.dtos.erros.ErrorDTO;
 import dev.aifudi.backend.dtos.erros.ValidationErrorDTO;
+import dev.aifudi.backend.services.exceptions.FailedAuthException;
 import dev.aifudi.backend.services.exceptions.InvalidRegisterException;
 import dev.aifudi.backend.services.exceptions.ResourceNotFoundException;
 import org.springframework.dao.DuplicateKeyException;
@@ -51,7 +52,13 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<ErrorDTO> handleDuplicatedEmail(){
         var status = HttpStatus.CONFLICT;
-        String message = "email já cadastrado";
+        String message = "An account with this email already exists";
         return ResponseEntity.status(status.value()).body(new ErrorDTO(message, status.value()));
+    }
+
+    @ExceptionHandler(FailedAuthException.class)
+    public ResponseEntity<ErrorDTO> handleFailedAuthException (FailedAuthException error){
+        var status = HttpStatus.UNAUTHORIZED;
+        return ResponseEntity.status(status.value()).body(new ErrorDTO(error.getMessage(), status.value()));
     }
 }

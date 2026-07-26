@@ -1,16 +1,23 @@
 package dev.aifudi.backend.services;
 
-import dev.aifudi.backend.dtos.UserRegisterRequestDTO;
+import dev.aifudi.backend.dtos.*;
 import dev.aifudi.backend.entities.Address;
+import dev.aifudi.backend.entities.Role;
 import dev.aifudi.backend.entities.User;
 import dev.aifudi.backend.repositories.AddressRepositoryImp;
 import dev.aifudi.backend.repositories.RoleRepositoryImp;
 import dev.aifudi.backend.repositories.UserRepositoryImp;
 import dev.aifudi.backend.services.exceptions.InvalidRegisterException;
+import dev.aifudi.backend.services.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -31,10 +38,7 @@ public class UserService {
 
     public void registerUser(UserRegisterRequestDTO user){
         // Find Role
-        var role = this.roleRepositoryImp.findRoleByName(user.roleName());
-        if(role.isEmpty()){
-            throw new InvalidRegisterException("Role", "Invalid Role");
-        }
+        Role role = findRole(user.name());
         logger.info("Role_Id Encontrado");
 
 
@@ -49,7 +53,7 @@ public class UserService {
                 user.name(),
                 user.email(),
                 hashedPassword,
-                role.get().getId()
+                role.getId()
         ));
         logger.info("Usuário Salvo: " + savedUser.getName());
 
@@ -67,6 +71,28 @@ public class UserService {
 
     }
 
+    @Transactional
+    public void updateUserRegister(UserUpdateRequestDTO updateUser, UUID userId){
+        UUID roleId = null;
 
+        if (updateUser.roleName() != null) {
+            roleId = findRole(updateUser.roleName()).getId();
+        }
+        UserUpdateDataDTO userData = new UserUpdateDataDTO(
+                userId,
+                updateUser.name(),
+                updateUser.email(),
+                roleId
+        );
+        this.userRepositoryImp.update(userData);
+    }
+
+    public Role findRole(String name){
+        var role = this.roleRepositoryImp.findRoleByName(name);
+        if(role.isEmpty()){
+            throw new InvalidRegisterException("Role", "Invalid Role");
+        }
+        return role.get();
+    }
 
 }

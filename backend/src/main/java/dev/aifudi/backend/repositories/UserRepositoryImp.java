@@ -1,13 +1,13 @@
 package dev.aifudi.backend.repositories;
 
-import dev.aifudi.backend.dtos.UserResponseDTO;
+import dev.aifudi.backend.dtos.UserProfileDTO;
+import dev.aifudi.backend.dtos.UserUpdateDataDTO;
+import dev.aifudi.backend.dtos.UserUpdateRequestDTO;
 import dev.aifudi.backend.entities.User;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 public class UserRepositoryImp implements UserRepository{
@@ -18,17 +18,65 @@ public class UserRepositoryImp implements UserRepository{
     }
 
     @Override
-    public Optional<User> findById(UUID id) {
-        return Optional.empty();
+    public Optional<UserProfileDTO> findById(UUID id) {
+        return this.jdbcClient
+                .sql("SELECT" +
+                        "    u.name," +
+                        "    u.email," +
+                        "    r.name AS role_name," +
+                        "    a.id AS addressId, " +
+                        "    a.cep," +
+                        "    a.state," +
+                        "    a.city," +
+                        "    a.address," +
+                        "    a.address_number AS number," +
+                        "    a.complement " +
+                        "FROM users u " +
+                        "INNER JOIN address a " +
+                        "    ON u.id = a.user_id " +
+                        "INNER JOIN roles r " +
+                        "    ON u.role_id = r.id " +
+                        "WHERE u.id = :id;")
+                .param("id", id)
+                .query(UserProfileDTO.class)
+                .optional();
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return Optional.empty();
+    public Optional<UserProfileDTO> findByEmail(String email) {
+        return this.jdbcClient
+                .sql("SELECT" +
+                        "    u.name," +
+                        "    u.email," +
+                        "    r.name AS role_name," +
+                        "    a.cep," +
+                        "    a.state," +
+                        "    a.city," +
+                        "    a.address," +
+                        "    a.address_number AS number," +
+                        "    a.complement " +
+                        "FROM users u " +
+                        "INNER JOIN address a " +
+                        "    ON u.id = a.user_id " +
+                        "INNER JOIN roles r " +
+                        "    ON u.role_id = r.id " +
+                        "WHERE u.email = :email;")
+                .param("email", email)
+                .query(UserProfileDTO.class)
+                .optional();
     }
 
     @Override
-    public List<UserResponseDTO> findAllByName(String name, int size, int offset) {
+    public Optional<User> findAuthUser(String email) {
+        return this.jdbcClient
+                .sql("SELECT * FROM users WHERE email = :email;")
+                .param("email", email)
+                .query(User.class)
+                .optional();
+    }
+
+    @Override
+    public List<UserProfileDTO> findAllByName(String name, int size, int offset) {
         return List.of();
     }
 
@@ -58,7 +106,36 @@ public class UserRepositoryImp implements UserRepository{
     }
 
     @Override
-    public Integer upDate(User user) {
-        return 0;
+    public void update(UserUpdateDataDTO updateData) {
+        StringBuilder sql = new StringBuilder("UPDATE users SET ");
+        Map<String, Object> params = new HashMap<>();
+
+        if (updateData.name() != null) {
+            sql.append("name = :name, ");
+            params.put("name",updateData.name());
+        }
+
+        if (updateData.email() != null) {
+            sql.append("email = :email, ");
+            params.put("email", updateData.email());
+        }
+
+        if (updateData.roleId() != null) {
+            sql.append("role_id = :roleId, ");
+            params.put("roleId", updateData.roleId());
+        }
+
+        if (params.isEmpty()) {
+            return;
+        }
+
+        sql.setLength(sql.length() - 2);
+
+        sql.append(" WHERE id = :id");
+        params.put("id", updateData.id());
+
+        JdbcClient.StatementSpec stmt = jdbcClient.sql(sql.toString());
+        params.forEach(stmt::param);
+        stmt.update();
     }
 }
