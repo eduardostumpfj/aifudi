@@ -2,7 +2,6 @@ package dev.aifudi.backend.repositories;
 
 import dev.aifudi.backend.dtos.UserProfileDTO;
 import dev.aifudi.backend.dtos.UserUpdateDataDTO;
-import dev.aifudi.backend.dtos.UserUpdateRequestDTO;
 import dev.aifudi.backend.entities.User;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;

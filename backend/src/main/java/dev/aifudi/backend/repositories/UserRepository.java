@@ -1,6 +1,7 @@
 package dev.aifudi.backend.repositories;
 
 import dev.aifudi.backend.dtos.*;
+import dev.aifudi.backend.dtos.UserUpdateDataDTO;
 import dev.aifudi.backend.entities.User;
 
 import java.util.List;

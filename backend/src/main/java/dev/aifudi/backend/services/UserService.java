@@ -1,6 +1,9 @@
 package dev.aifudi.backend.services;
 
 import dev.aifudi.backend.dtos.*;
+import dev.aifudi.backend.dtos.AddressUpdateDataDTO;
+import dev.aifudi.backend.dtos.UserUpdateDataDTO;
+import dev.aifudi.backend.dtos.UserUpdateRequestDTO;
 import dev.aifudi.backend.entities.Address;
 import dev.aifudi.backend.entities.Role;
 import dev.aifudi.backend.entities.User;
@@ -8,15 +11,12 @@ import dev.aifudi.backend.repositories.AddressRepositoryImp;
 import dev.aifudi.backend.repositories.RoleRepositoryImp;
 import dev.aifudi.backend.repositories.UserRepositoryImp;
 import dev.aifudi.backend.services.exceptions.InvalidRegisterException;
-import dev.aifudi.backend.services.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,14 +38,12 @@ public class UserService {
 
     public void registerUser(UserRegisterRequestDTO user){
         // Find Role
-        Role role = findRole(user.name());
+        Role role = findRole(user.roleName());
         logger.info("Role_Id Encontrado");
-
 
         // HashPassword
         String hashedPassword = this.passwordEncoder.encode(user.password());
         logger.info("Password criptografado");
-
 
         // Save User
         var savedUser = this.userRepositoryImp.save(new User(
@@ -73,6 +71,7 @@ public class UserService {
 
     @Transactional
     public void updateUserRegister(UserUpdateRequestDTO updateUser, UUID userId){
+        // Update User
         UUID roleId = null;
 
         if (updateUser.roleName() != null) {
@@ -85,6 +84,19 @@ public class UserService {
                 roleId
         );
         this.userRepositoryImp.update(userData);
+
+        // Update Address
+        AddressUpdateDataDTO addressData = new AddressUpdateDataDTO(
+                userId,
+                updateUser.cep(),
+                updateUser.state(),
+                updateUser.city(),
+                updateUser.address(),
+                updateUser.number(),
+                updateUser.complement()
+        );
+        this.addressRepositoryImp.update(addressData);
+
     }
 
     public Role findRole(String name){

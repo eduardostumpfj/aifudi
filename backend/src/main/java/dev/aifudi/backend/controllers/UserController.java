@@ -16,8 +16,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/v1/users")
 public class UserController {
-    private UserService userService;
-    private AuthService authService;
+    private final UserService userService;
+    private final AuthService authService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 
@@ -40,9 +40,17 @@ public class UserController {
     @PutMapping("/{email}")
     public ResponseEntity<Void> updateUserRegister(
             @PathVariable String email,
+
+            @RequestHeader(value = "Authorization")
+            String authHeader,
+
+            @Valid
             @RequestBody UserUpdateRequestDTO updateUser
     ){
+
         logger.info("PUT -> /{email}");
+        logger.info("AuthHeader: " + authHeader);
+        String base64Credentials = authHeader.substring(6).trim();
         UUID userId = this.authService.authenticateUser( new UserAuthDTO(updateUser.email(), updateUser.password()));
 
         logger.info("Usuário autenticado");
