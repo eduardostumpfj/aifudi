@@ -44,7 +44,6 @@ public class UserRepositoryImp implements UserRepository{
 
     @Override
     public Optional<UserProfileDTO> findByEmail(String email) {
-        System.out.println("Entrei no findByEmail");
         return this.jdbcClient
                 .sql("SELECT" +
                         "    u.id, " +
@@ -103,8 +102,11 @@ public class UserRepositoryImp implements UserRepository{
     }
 
     @Override
-    public Integer delete(UUID id) {
-        return 0;
+    public void delete(UUID id) {
+        this.jdbcClient
+                .sql("DELETE FROM users WHERE id = :id")
+                .param("id", id)
+                .update();
     }
 
     @Override

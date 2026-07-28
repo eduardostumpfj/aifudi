@@ -6,17 +6,12 @@ import dev.aifudi.backend.entities.User;
 import dev.aifudi.backend.services.AuthService;
 import dev.aifudi.backend.services.PermissionService;
 import dev.aifudi.backend.services.UserService;
-import dev.aifudi.backend.services.exceptions.AccessDeniedException;
-import dev.aifudi.backend.services.exceptions.InvalidRegisterException;
-import dev.aifudi.backend.services.exceptions.NotFoundException;
-import dev.aifudi.backend.services.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -39,6 +34,9 @@ public class UserController {
             @RequestBody UserRegisterRequestDTO user
             ){
         logger.info("POST -> /register");
+        // Register doesn't need auth
+        // Check Permissions
+        this.permissionService.checkRegisterUserPermission(user);
 
         this.userService.registerUser(user);
         return ResponseEntity.status(200).build();
@@ -59,14 +57,31 @@ public class UserController {
         // check authentication
         User authUser = this.authService.authenticateUser(authHeader);
 
-        logger.info("Usuário autenticado");
         // Check permission
         this.permissionService.checkRegisterUpdatePermission(authUser, email);
-        logger.info("Usuário autorizado");
 
         // Update User
         this.userService.updateUserRegister(updateUser, email);
-        logger.info("Usuário Atualizado");
+
+        return ResponseEntity.status(204).build();
+    }
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deleteRegister(
+            @PathVariable String email,
+
+            @RequestHeader(value = "Authorization")
+            String authHeader
+    ){
+        logger.info("DELETE -> /{email}");
+        // check authentication
+        User authUser = this.authService.authenticateUser(authHeader);
+
+        // Check permission
+        this.permissionService.checkDeleteUserPermission(authUser, email);
+
+        // Delete User Data (register and address)
+        this.userService.deleteUserRegister(email);
 
         return ResponseEntity.status(204).build();
     }

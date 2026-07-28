@@ -3,14 +3,12 @@ package dev.aifudi.backend.services;
 import dev.aifudi.backend.entities.User;
 import dev.aifudi.backend.repositories.UserRepositoryImp;
 import dev.aifudi.backend.services.exceptions.FailedAuthException;
-import dev.aifudi.backend.services.exceptions.ResourceNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -23,7 +21,6 @@ public class AuthService {
     }
 
     public User authenticateUser(String authHeader){
-        System.out.println("Credenciais: " + authHeader);
 
         // Format Credentials
         String base64Credentials = authHeader.substring(6).trim();
@@ -40,7 +37,7 @@ public class AuthService {
         // Find user
         Optional<User> foundUser = this.userRepositoryImp.findAuthUser(userEmail);
         if(foundUser.isEmpty()){
-            throw new ResourceNotFoundException("User not found");
+            throw new FailedAuthException("Invalid Credentials");
         }
 
         // Check Password

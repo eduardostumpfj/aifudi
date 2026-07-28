@@ -67,10 +67,10 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 WITH insert_user AS (
   INSERT INTO users (role_id, name, email, hashed_password)
   VALUES (
-    (SELECT id FROM roles WHERE name = 'user' LIMIT 1),
-    'Teste',             
-    'teste@teste.com',   
-    crypt('teste123', gen_salt('bf', 10))
+    (SELECT id FROM roles WHERE name = 'admin' LIMIT 1),
+    'Admin',             
+    'admin@aifudi.com',   
+    crypt('admin123', gen_salt('bf', 10))
   )
   RETURNING id           
 )

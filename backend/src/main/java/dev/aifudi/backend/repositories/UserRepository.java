@@ -14,6 +14,6 @@ public interface UserRepository {
     Optional<UserProfileDTO> findByEmail(String email);
     List<UserProfileDTO> findAllByName(String name, int size, int offset);
     User save(User user);
-    Integer delete(UUID id);
+    void delete(UUID id);
     void update(UserUpdateDataDTO updateData);
 }

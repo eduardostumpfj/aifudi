@@ -42,11 +42,9 @@ public class UserService {
     public void registerUser(UserRegisterRequestDTO user){
         // Find Role
         Role role = findRole(user.roleName());
-        logger.info("Role_Id Encontrado");
 
         // HashPassword
         String hashedPassword = this.passwordEncoder.encode(user.password());
-        logger.info("Password criptografado");
 
         // Save User
         var savedUser = this.userRepositoryImp.save(new User(
@@ -56,7 +54,6 @@ public class UserService {
                 hashedPassword,
                 role.getId()
         ));
-        logger.info("Usuário Salvo: " + savedUser.getName());
 
         // Save Address
         this.addressRepositoryImp.save(new Address(
@@ -77,10 +74,8 @@ public class UserService {
         // Update User
         // Get URL User
         UserProfileDTO foundUser = this.userRepositoryImp.findByEmail(requestEmail).orElseThrow(() -> new NotFoundException("User not Found"));
-        logger.info("Sai do find by email. Usuário encontrado: " + foundUser.address());
 
-
-        // In this route the app users cannot change their roles.
+        // In this route app users cannot change their roles.
         UserUpdateDataDTO userData = new UserUpdateDataDTO(
                 foundUser.id(),
                 updateUser.name(),
@@ -99,6 +94,11 @@ public class UserService {
                 updateUser.complement()
         );
         this.addressRepositoryImp.update(addressData);
+    }
+
+    public void deleteUserRegister(String requestEmail){
+        UserProfileDTO foundUser = this.userRepositoryImp.findByEmail(requestEmail).orElseThrow(() -> new NotFoundException("User not Found"));
+        this.userRepositoryImp.delete(foundUser.id());
     }
 
     public Role findRole(String name){
