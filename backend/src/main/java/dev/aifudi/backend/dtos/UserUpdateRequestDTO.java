@@ -5,12 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record UserUpdateRequestDTO(
-        @NotBlank
         @Email
         String email,
-
-        @NotBlank
-        String password,
 
         String name,
 

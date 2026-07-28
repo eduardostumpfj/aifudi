@@ -49,9 +49,7 @@ public class UserController {
     ){
 
         logger.info("PUT -> /{email}");
-        logger.info("AuthHeader: " + authHeader);
-        String base64Credentials = authHeader.substring(6).trim();
-        UUID userId = this.authService.authenticateUser( new UserAuthDTO(updateUser.email(), updateUser.password()));
+        UUID userId = this.authService.authenticateUser(authHeader);
 
         logger.info("Usuário autenticado");
         this.userService.updateUserRegister(updateUser, userId);
