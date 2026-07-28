@@ -1,4 +1,4 @@
-package dev.aifudi.backend.dtos;
+package dev.aifudi.backend.dtos.db;
 
 import jakarta.validation.constraints.NotNull;
 

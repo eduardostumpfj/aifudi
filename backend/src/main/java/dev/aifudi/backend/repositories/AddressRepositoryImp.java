@@ -1,6 +1,6 @@
 package dev.aifudi.backend.repositories;
 
-import dev.aifudi.backend.dtos.AddressUpdateDataDTO;
+import dev.aifudi.backend.dtos.db.AddressUpdateDataDTO;
 import dev.aifudi.backend.entities.Address;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;

@@ -1,8 +1,7 @@
 package dev.aifudi.backend.controllers;
 
-import dev.aifudi.backend.dtos.UserAuthDTO;
-import dev.aifudi.backend.dtos.UserRegisterRequestDTO;
-import dev.aifudi.backend.dtos.UserUpdateRequestDTO;
+import dev.aifudi.backend.dtos.request.UserRegisterRequestDTO;
+import dev.aifudi.backend.dtos.request.UserUpdateRequestDTO;
 import dev.aifudi.backend.services.AuthService;
 import dev.aifudi.backend.services.UserService;
 import jakarta.validation.Valid;

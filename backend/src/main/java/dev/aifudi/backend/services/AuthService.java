@@ -1,6 +1,5 @@
 package dev.aifudi.backend.services;
 
-import dev.aifudi.backend.dtos.UserAuthDTO;
 import dev.aifudi.backend.repositories.UserRepositoryImp;
 import dev.aifudi.backend.services.exceptions.FailedAuthException;
 import dev.aifudi.backend.services.exceptions.ResourceNotFoundException;

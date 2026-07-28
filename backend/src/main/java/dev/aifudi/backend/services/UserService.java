@@ -1,9 +1,9 @@
 package dev.aifudi.backend.services;
 
-import dev.aifudi.backend.dtos.*;
-import dev.aifudi.backend.dtos.AddressUpdateDataDTO;
-import dev.aifudi.backend.dtos.UserUpdateDataDTO;
-import dev.aifudi.backend.dtos.UserUpdateRequestDTO;
+import dev.aifudi.backend.dtos.db.AddressUpdateDataDTO;
+import dev.aifudi.backend.dtos.db.UserUpdateDataDTO;
+import dev.aifudi.backend.dtos.request.UserRegisterRequestDTO;
+import dev.aifudi.backend.dtos.request.UserUpdateRequestDTO;
 import dev.aifudi.backend.entities.Address;
 import dev.aifudi.backend.entities.Role;
 import dev.aifudi.backend.entities.User;

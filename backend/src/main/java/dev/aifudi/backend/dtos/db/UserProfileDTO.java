@@ -1,24 +1,18 @@
-package dev.aifudi.backend.dtos;
+package dev.aifudi.backend.dtos.db;
 
-import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record AddressUpdateDataDTO(
-        @NotNull
-        UUID userId,
-
+public record UserProfileDTO(
+        String name,
+        String email,
+        String roleName,
+        UUID addressId,
         String cep,
-
         String state,
-
         String city,
-
         String address,
-
         String number,
-
         String complement
-
 ) {
 }
