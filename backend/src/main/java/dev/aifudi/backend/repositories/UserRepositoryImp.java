@@ -20,6 +20,7 @@ public class UserRepositoryImp implements UserRepository{
     public Optional<UserProfileDTO> findById(UUID id) {
         return this.jdbcClient
                 .sql("SELECT" +
+                        "    u.id, " +
                         "    u.name," +
                         "    u.email," +
                         "    r.name AS role_name," +
@@ -43,8 +44,10 @@ public class UserRepositoryImp implements UserRepository{
 
     @Override
     public Optional<UserProfileDTO> findByEmail(String email) {
+        System.out.println("Entrei no findByEmail");
         return this.jdbcClient
                 .sql("SELECT" +
+                        "    u.id, " +
                         "    u.name," +
                         "    u.email," +
                         "    r.name AS role_name," +
@@ -117,11 +120,6 @@ public class UserRepositoryImp implements UserRepository{
         if (updateData.email() != null) {
             sql.append("email = :email, ");
             params.put("email", updateData.email());
-        }
-
-        if (updateData.roleId() != null) {
-            sql.append("role_id = :roleId, ");
-            params.put("roleId", updateData.roleId());
         }
 
         if (params.isEmpty()) {

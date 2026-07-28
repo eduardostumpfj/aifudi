@@ -1,6 +1,7 @@
 package dev.aifudi.backend.services;
 
 import dev.aifudi.backend.dtos.db.AddressUpdateDataDTO;
+import dev.aifudi.backend.dtos.db.UserProfileDTO;
 import dev.aifudi.backend.dtos.db.UserUpdateDataDTO;
 import dev.aifudi.backend.dtos.request.UserRegisterRequestDTO;
 import dev.aifudi.backend.dtos.request.UserUpdateRequestDTO;
@@ -10,7 +11,9 @@ import dev.aifudi.backend.entities.User;
 import dev.aifudi.backend.repositories.AddressRepositoryImp;
 import dev.aifudi.backend.repositories.RoleRepositoryImp;
 import dev.aifudi.backend.repositories.UserRepositoryImp;
+import dev.aifudi.backend.services.exceptions.AccessDeniedException;
 import dev.aifudi.backend.services.exceptions.InvalidRegisterException;
+import dev.aifudi.backend.services.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -70,24 +73,24 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUserRegister(UserUpdateRequestDTO updateUser, UUID userId){
+    public void updateUserRegister(UserUpdateRequestDTO updateUser, String requestEmail){
         // Update User
-        UUID roleId = null;
+        // Get URL User
+        UserProfileDTO foundUser = this.userRepositoryImp.findByEmail(requestEmail).orElseThrow(() -> new NotFoundException("User not Found"));
+        logger.info("Sai do find by email. Usuário encontrado: " + foundUser.address());
 
-        if (updateUser.roleName() != null) {
-            roleId = findRole(updateUser.roleName()).getId();
-        }
+
+        // In this route the app users cannot change their roles.
         UserUpdateDataDTO userData = new UserUpdateDataDTO(
-                userId,
+                foundUser.id(),
                 updateUser.name(),
-                updateUser.email(),
-                roleId
+                updateUser.email()
         );
         this.userRepositoryImp.update(userData);
 
         // Update Address
         AddressUpdateDataDTO addressData = new AddressUpdateDataDTO(
-                userId,
+                foundUser.id(),
                 updateUser.cep(),
                 updateUser.state(),
                 updateUser.city(),
@@ -96,7 +99,6 @@ public class UserService {
                 updateUser.complement()
         );
         this.addressRepositoryImp.update(addressData);
-
     }
 
     public Role findRole(String name){

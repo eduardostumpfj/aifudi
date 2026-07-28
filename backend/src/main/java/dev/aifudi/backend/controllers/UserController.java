@@ -2,8 +2,14 @@ package dev.aifudi.backend.controllers;
 
 import dev.aifudi.backend.dtos.request.UserRegisterRequestDTO;
 import dev.aifudi.backend.dtos.request.UserUpdateRequestDTO;
+import dev.aifudi.backend.entities.User;
 import dev.aifudi.backend.services.AuthService;
+import dev.aifudi.backend.services.PermissionService;
 import dev.aifudi.backend.services.UserService;
+import dev.aifudi.backend.services.exceptions.AccessDeniedException;
+import dev.aifudi.backend.services.exceptions.InvalidRegisterException;
+import dev.aifudi.backend.services.exceptions.NotFoundException;
+import dev.aifudi.backend.services.exceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +23,14 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
     private final AuthService authService;
+    private final PermissionService permissionService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 
-    public UserController(UserService userService, AuthService authService){
+    public UserController(UserService userService, AuthService authService, PermissionService permissionService){
         this.userService = userService;
         this.authService = authService;
+        this.permissionService = permissionService;
     }
 
     @PostMapping("/register")
@@ -48,12 +56,19 @@ public class UserController {
     ){
 
         logger.info("PUT -> /{email}");
-        UUID userId = this.authService.authenticateUser(authHeader);
+        // check authentication
+        User authUser = this.authService.authenticateUser(authHeader);
 
         logger.info("Usuário autenticado");
-        this.userService.updateUserRegister(updateUser, userId);
+        // Check permission
+        this.permissionService.checkRegisterUpdatePermission(authUser, email);
+        logger.info("Usuário autorizado");
 
-        return ResponseEntity.status(200).build();
+        // Update User
+        this.userService.updateUserRegister(updateUser, email);
+        logger.info("Usuário Atualizado");
+
+        return ResponseEntity.status(204).build();
     }
 
 }

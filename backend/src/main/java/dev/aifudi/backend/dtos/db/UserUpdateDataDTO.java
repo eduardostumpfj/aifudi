@@ -10,8 +10,6 @@ public record UserUpdateDataDTO(
 
         String name,
 
-        String email,
-
-        UUID roleId
+        String email
 ) {
 }

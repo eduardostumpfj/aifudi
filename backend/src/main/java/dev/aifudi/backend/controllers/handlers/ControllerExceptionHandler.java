@@ -2,9 +2,7 @@ package dev.aifudi.backend.controllers.handlers;
 
 import dev.aifudi.backend.dtos.erros.ErrorDTO;
 import dev.aifudi.backend.dtos.erros.ValidationErrorDTO;
-import dev.aifudi.backend.services.exceptions.FailedAuthException;
-import dev.aifudi.backend.services.exceptions.InvalidRegisterException;
-import dev.aifudi.backend.services.exceptions.ResourceNotFoundException;
+import dev.aifudi.backend.services.exceptions.*;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +17,21 @@ import java.util.List;
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorDTO> handleResourceNotFoundException (ResourceNotFoundException error){
+    public ResponseEntity<ErrorDTO> handleResourceNotFoundException (ResourceNotFoundException e){
         var status = HttpStatus.BAD_REQUEST;
-        return ResponseEntity.status(status.value()).body(new ErrorDTO(error.getMessage(), status.value()));
+        return ResponseEntity.status(status.value()).body(new ErrorDTO(e.getMessage(), status.value()));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorDTO> handleNotFoundException (NotFoundException e){
+        var status = HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status.value()).body(new ErrorDTO(e.getMessage(), status.value()));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorDTO> handleAccessDeniedException (AccessDeniedException e){
+        var status = HttpStatus.FORBIDDEN;
+        return ResponseEntity.status(status.value()).body(new ErrorDTO(e.getMessage(), status.value()));
     }
 
     @ExceptionHandler({

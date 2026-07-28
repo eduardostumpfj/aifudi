@@ -11,6 +11,7 @@ INSERT INTO roles (name) VALUES ('owner');
 
 
 -- USERS --------------------------
+
 CREATE OR REPLACE FUNCTION trigger_set_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -41,7 +42,6 @@ CREATE TRIGGER update_user_timestamp
   EXECUTE FUNCTION trigger_set_timestamp();
 
 
-
 -- ADDRESS --------------------
 CREATE TABLE address (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -59,4 +59,29 @@ CREATE TABLE address (
       ON DELETE CASCADE
 );
 
+
+-- INSERT USER -------------------------------------
+-- Extension just for the first user insertion.
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+WITH insert_user AS (
+  INSERT INTO users (role_id, name, email, hashed_password)
+  VALUES (
+    (SELECT id FROM roles WHERE name = 'user' LIMIT 1),
+    'Teste',             
+    'teste@teste.com',   
+    crypt('teste123', gen_salt('bf', 10))
+  )
+  RETURNING id           
+)
+INSERT INTO address (user_id, cep, state, city, address, address_number, complement)
+SELECT 
+    id,                 
+    '12345-678',
+    'PR',
+    'Curitiba',
+    'Rua Teste',
+    '123',
+    'Apto 101'
+FROM insert_user;
 

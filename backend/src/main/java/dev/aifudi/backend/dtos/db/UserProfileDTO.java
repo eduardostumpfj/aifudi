@@ -4,10 +4,10 @@ package dev.aifudi.backend.dtos.db;
 import java.util.UUID;
 
 public record UserProfileDTO(
+        UUID id,
         String name,
         String email,
         String roleName,
-        UUID addressId,
         String cep,
         String state,
         String city,
