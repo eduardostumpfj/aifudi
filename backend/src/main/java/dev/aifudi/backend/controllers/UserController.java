@@ -1,5 +1,6 @@
 package dev.aifudi.backend.controllers;
 
+import dev.aifudi.backend.dtos.request.UserResetPasswordRequestDTO;
 import dev.aifudi.backend.dtos.request.UserRegisterRequestDTO;
 import dev.aifudi.backend.dtos.request.UserUpdateRequestDTO;
 import dev.aifudi.backend.entities.User;
@@ -7,6 +8,7 @@ import dev.aifudi.backend.services.AuthService;
 import dev.aifudi.backend.services.PermissionService;
 import dev.aifudi.backend.services.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -86,4 +88,27 @@ public class UserController {
         return ResponseEntity.status(204).build();
     }
 
+
+    @PostMapping("/{email}/password")
+    public ResponseEntity<Void> updatePassword(
+            @Valid
+            @RequestBody UserResetPasswordRequestDTO password,
+
+            @PathVariable String email,
+
+            @RequestHeader(value = "Authorization") String authHeader
+            ){
+        logger.info("UPDATE PASSWORD -> /{email}/password");
+
+        // check authentication
+        User authUser = this.authService.authenticateUser(authHeader);
+
+        // check permissions
+        this.permissionService.checkResetPasswordPermission(authUser, email);
+
+        //Reset Password
+        this.userService.resetUserPassword(authUser, password.password());
+
+        return ResponseEntity.status(204).build();
+    }
 }

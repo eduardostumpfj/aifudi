@@ -79,7 +79,8 @@ public class UserService {
         UserUpdateDataDTO userData = new UserUpdateDataDTO(
                 foundUser.id(),
                 updateUser.name(),
-                updateUser.email()
+                updateUser.email(),
+                null
         );
         this.userRepositoryImp.update(userData);
 
@@ -99,6 +100,27 @@ public class UserService {
     public void deleteUserRegister(String requestEmail){
         UserProfileDTO foundUser = this.userRepositoryImp.findByEmail(requestEmail).orElseThrow(() -> new NotFoundException("User not Found"));
         this.userRepositoryImp.delete(foundUser.id());
+    }
+
+    public void resetUserPassword(User authUser, String password){
+        // Check same password
+        boolean matchedPassword = this.passwordEncoder.matches(password ,authUser.getHashedPassword());
+        if(matchedPassword){
+            throw new InvalidRegisterException("password", "The passwords cannot be the same");
+        }
+
+        // HashPassword
+        String hashedPassword = this.passwordEncoder.encode(password);
+
+        UserUpdateDataDTO userData = new UserUpdateDataDTO(
+                authUser.getId(),
+                null,
+                null,
+                hashedPassword
+        );
+
+        this.userRepositoryImp.update(userData);
+
     }
 
     public Role findRole(String name){

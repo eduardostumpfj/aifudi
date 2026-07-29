@@ -51,4 +51,10 @@ public class PermissionService {
              throw new AccessDeniedException("Not allowed to delete another user's register");
          }
      }
+
+     public void checkResetPasswordPermission(User authUser, String requestEmail){
+        if(!authUser.getEmail().equals(requestEmail)){
+            throw new AccessDeniedException("Not allowed to reset another user's password");
+        }
+     }
 }

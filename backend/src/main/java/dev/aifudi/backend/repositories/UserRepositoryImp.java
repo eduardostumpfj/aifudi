@@ -124,6 +124,11 @@ public class UserRepositoryImp implements UserRepository{
             params.put("email", updateData.email());
         }
 
+        if (updateData.hashedPassword() != null) {
+            sql.append("hashed_password = :hashedPassword, ");
+            params.put("hashedPassword", updateData.hashedPassword());
+        }
+
         if (params.isEmpty()) {
             return;
         }
