@@ -7,6 +7,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -37,12 +38,14 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
             InvalidRegisterException.class,
+            MissingServletRequestParameterException.class,
+            InvalidParamException.class
     })
     public ResponseEntity<ValidationErrorDTO> handleMethodValidationException (Exception e){
         var status = HttpStatus.BAD_REQUEST;
         List<String> errors = new ArrayList<>();
 
-        // Invalid params
+        // Invalid fields
         if (e instanceof MethodArgumentNotValidException ex) {
             for (var error : ex.getBindingResult().getFieldErrors()) {
                 errors.add(error.getField() + ": " + error.getDefaultMessage());
@@ -53,6 +56,17 @@ public class ControllerExceptionHandler {
         if (e instanceof InvalidRegisterException ex) {
             errors.add(ex.getField() + ": " + ex.getMessage());
         }
+
+        // Invalid params
+        if (e instanceof MissingServletRequestParameterException ex){
+            errors.add(ex.getParameterName() + ": " + ex.getMessage());
+        }
+
+        // Empty param value
+        if (e instanceof InvalidParamException ex) {
+            errors.add(ex.getField() + ": " + ex.getMessage());
+        }
+
 
         return ResponseEntity
                 .status(status)

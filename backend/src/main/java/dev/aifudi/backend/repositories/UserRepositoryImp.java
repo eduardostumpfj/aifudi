@@ -2,6 +2,7 @@ package dev.aifudi.backend.repositories;
 
 import dev.aifudi.backend.dtos.db.UserProfileDTO;
 import dev.aifudi.backend.dtos.db.UserUpdateDataDTO;
+import dev.aifudi.backend.dtos.response.UserResponseDTO;
 import dev.aifudi.backend.entities.User;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -77,8 +78,43 @@ public class UserRepositoryImp implements UserRepository{
     }
 
     @Override
-    public List<UserProfileDTO> findAllByName(String name, int size, int offset) {
-        return List.of();
+    public List<UserResponseDTO> findAllByName(String name, Integer size, Integer offset) {
+        Map<String, Object> params = new HashMap<>();
+        StringBuilder sql = new StringBuilder(
+                "SELECT " +
+                        "    u.name," +
+                        "    u.email," +
+                        "    r.name AS role_name," +
+                        "    a.cep," +
+                        "    a.state," +
+                        "    a.city," +
+                        "    a.address," +
+                        "    a.address_number AS number," +
+                        "    a.complement " +
+                        "FROM users u " +
+                        "INNER JOIN address a " +
+                        "    ON u.id = a.user_id " +
+                        "INNER JOIN roles r " +
+                        "    ON u.role_id = r.id " +
+                        "WHERE LOWER(u.name) LIKE :name"
+        );
+        params.put("name", "%" + name + "%");
+
+        if(size != null){
+            sql.append(" LIMIT :size ");
+            params.put("size", size);
+
+            if(offset !=null){
+                sql.append(" OFFSET :offset ");
+                params.put("offset", offset);
+            }
+        }
+
+        sql.append(";");
+
+        JdbcClient.StatementSpec stmt = jdbcClient.sql(sql.toString());
+        params.forEach(stmt::param);
+        return stmt.query(UserResponseDTO.class).list();
     }
 
     @Override

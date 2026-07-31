@@ -1,13 +1,18 @@
--- ROLES --------------------------
+-- EXTENSIONS --------------------------
+-- Exntesion for remove accents from strings, useful for get users by name.
+CREATE EXTENSION IF NOT EXISTS unaccent;
+-- Extension just for the first user insertion.
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+-- ROLES --------------------------
 CREATE TABLE roles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(50) NOT NULL
 );
 
-INSERT INTO roles (name) VALUES ('admin');
-INSERT INTO roles (name) VALUES ('user');
-INSERT INTO roles (name) VALUES ('owner');
+INSERT INTO roles (name) VALUES ('ADMIN');
+INSERT INTO roles (name) VALUES ('USER');
+INSERT INTO roles (name) VALUES ('OWNER');
 
 
 -- USERS --------------------------
@@ -61,13 +66,10 @@ CREATE TABLE address (
 
 
 -- INSERT USER -------------------------------------
--- Extension just for the first user insertion.
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
 WITH insert_user AS (
   INSERT INTO users (role_id, name, email, hashed_password)
   VALUES (
-    (SELECT id FROM roles WHERE name = 'admin' LIMIT 1),
+    (SELECT id FROM roles WHERE name = 'ADMIN' LIMIT 1),
     'Admin',             
     'admin@aifudi.com',   
     crypt('admin123', gen_salt('bf', 10))

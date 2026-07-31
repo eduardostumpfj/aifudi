@@ -3,20 +3,31 @@ package dev.aifudi.backend.controllers;
 import dev.aifudi.backend.dtos.request.UserResetPasswordRequestDTO;
 import dev.aifudi.backend.dtos.request.UserRegisterRequestDTO;
 import dev.aifudi.backend.dtos.request.UserUpdateRequestDTO;
+import dev.aifudi.backend.dtos.response.UserResponseDTO;
 import dev.aifudi.backend.entities.User;
 import dev.aifudi.backend.services.AuthService;
 import dev.aifudi.backend.services.PermissionService;
 import dev.aifudi.backend.services.UserService;
+import dev.aifudi.backend.services.exceptions.InvalidParamException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.links.Link;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/v1/users")
+//@Tag(name = "Users")
 public class UserController {
     private final UserService userService;
     private final AuthService authService;
@@ -44,7 +55,107 @@ public class UserController {
         return ResponseEntity.status(200).build();
     }
 
+    @GetMapping
+    @Operation(
+            tags = "Get all users",
+            description = "This operation provides support for retrieving all registered users accessible in the system, " +
+                    "determined via the applied request authorization. By default, this call will return all matching records.<br><br> " +
+                    "<br>" +
+                    "The caller can define specific limits and pagination suited to their application by utilizing the " +
+                    "`size` and `page` query parameters to restrict the quantity of the returned payload.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = UserResponseDTO.class))
+                            )
+
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request. Need a name param and the name cannot be empty",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Problems with authentication",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "The server encountered an unexpected error.",
+                            content = @Content
+                    ),
+
+            }
+
+    )
+    public ResponseEntity<List<UserResponseDTO>> getAllByName(
+            @RequestParam("name") String name,
+            @RequestParam(value = "size", required = false) Integer size,
+            @RequestParam(value = "page", required= false) Integer page,
+            @RequestHeader(value = "Authorization") String authHeader
+    ){
+        logger.info("GET -> /users");
+
+        if(name.isEmpty()){
+            throw new InvalidParamException("name", "Name cannot be empty");
+        }
+
+        // check authentication
+        this.authService.authenticateUser(authHeader);
+
+        List<UserResponseDTO> users = this.userService.getUsersByName(name, size, page);
+        return ResponseEntity.ok(users);
+    }
+
+
+
     @PutMapping("/{email}")
+    @Operation(
+            tags = "Update user profile",
+            description = "This operation provides support for updating the details of an existing registered user in the system, " +
+                    "determined via the applied request authorization. By default, this call will modify the user record based on the provided payload.<br><br> " +
+                    "<br>" +
+                    "The caller must specify the target user utilizing the `email` path parameter and provide the updated data within the request body.<br><br> " +
+                    "<br>" +
+                    "Note: While regular users are permitted to update their own profile information, modifying another user's record is strictly restricted to accounts with the `ADMIN` role.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "No Content",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request.",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Problems with authentication.",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Forbidden. This user cannot change another user's profile.",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found. Could not find a user with the provided email.",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "The server encountered an unexpected error.",
+                            content = @Content
+                    ),
+
+            }
+
+    )
     public ResponseEntity<Void> updateUserRegister(
             @PathVariable String email,
 
@@ -89,7 +200,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/{email}/password")
+    @PutMapping("/{email}/password")
     public ResponseEntity<Void> updatePassword(
             @Valid
             @RequestBody UserResetPasswordRequestDTO password,
@@ -111,4 +222,6 @@ public class UserController {
 
         return ResponseEntity.status(204).build();
     }
+
+
 }

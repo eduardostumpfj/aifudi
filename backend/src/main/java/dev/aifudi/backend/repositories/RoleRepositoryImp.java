@@ -1,6 +1,7 @@
 package dev.aifudi.backend.repositories;
 
 import dev.aifudi.backend.entities.Role;
+import dev.aifudi.backend.enums.RoleName;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +17,7 @@ public class RoleRepositoryImp implements RoleRepository {
     }
 
     @Override
-    public Optional<Role> findRoleByName(String name) {
+    public Optional<Role> findRoleByName(RoleName name) {
         return this.jdbcClient
                 .sql("SELECT * FROM roles WHERE name = :name")
                 .param("name", name)

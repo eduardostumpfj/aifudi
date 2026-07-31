@@ -5,9 +5,11 @@ import dev.aifudi.backend.dtos.db.UserProfileDTO;
 import dev.aifudi.backend.dtos.db.UserUpdateDataDTO;
 import dev.aifudi.backend.dtos.request.UserRegisterRequestDTO;
 import dev.aifudi.backend.dtos.request.UserUpdateRequestDTO;
+import dev.aifudi.backend.dtos.response.UserResponseDTO;
 import dev.aifudi.backend.entities.Address;
 import dev.aifudi.backend.entities.Role;
 import dev.aifudi.backend.entities.User;
+import dev.aifudi.backend.enums.RoleName;
 import dev.aifudi.backend.repositories.AddressRepositoryImp;
 import dev.aifudi.backend.repositories.RoleRepositoryImp;
 import dev.aifudi.backend.repositories.UserRepositoryImp;
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -120,10 +123,18 @@ public class UserService {
         );
 
         this.userRepositoryImp.update(userData);
-
     }
 
-    public Role findRole(String name){
+    public List<UserResponseDTO> getUsersByName (String name, Integer size, Integer page){
+        Integer offset = null;
+        if(page != null && size != null){
+            offset = (page - 1) * size;
+        }
+
+        return this.userRepositoryImp.findAllByName(name, size, offset);
+    }
+
+    public Role findRole(RoleName name){
         var role = this.roleRepositoryImp.findRoleByName(name);
         if(role.isEmpty()){
             throw new InvalidRegisterException("Role", "Invalid Role");

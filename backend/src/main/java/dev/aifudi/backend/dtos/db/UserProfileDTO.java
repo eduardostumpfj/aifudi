@@ -1,13 +1,15 @@
 package dev.aifudi.backend.dtos.db;
 
 
+import dev.aifudi.backend.enums.RoleName;
+
 import java.util.UUID;
 
 public record UserProfileDTO(
         UUID id,
         String name,
         String email,
-        String roleName,
+        RoleName roleName,
         String cep,
         String state,
         String city,
