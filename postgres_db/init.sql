@@ -65,7 +65,7 @@ CREATE TABLE address (
 );
 
 
--- INSERT USER -------------------------------------
+-- INSERT ADMIN USER -------------------------------------
 WITH insert_user AS (
   INSERT INTO users (role_id, name, email, hashed_password)
   VALUES (
@@ -85,5 +85,27 @@ SELECT
     'Rua Teste',
     '123',
     'Apto 101'
+FROM insert_user;
+
+
+-- INSERT 'USER' USER -------------------------------------
+WITH insert_user AS (
+  INSERT INTO users (role_id, name, email, hashed_password)
+  VALUES (
+    (SELECT id FROM roles WHERE name = 'USER' LIMIT 1),
+    'Maria Santos',             
+    'mariasantos@gmail.com',   
+    crypt('maria123', gen_salt('bf', 10))
+  )
+  RETURNING id           
+)
+INSERT INTO address (user_id, cep, state, city, address, address_number)
+SELECT 
+    id,                 
+    '12345-678',
+    'PR',
+    'Curitiba',
+    'Rua XV de Novembro',
+    '22222'
 FROM insert_user;
 

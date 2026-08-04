@@ -16,10 +16,6 @@ public record UserUpdateRequestDTO(
         @Size(max = 100, message = "The field must be 100 characters or less")
         String name,
 
-        @Schema(description = "Name of the role", example = "OWNER", requiredMode = Schema.RequiredMode.NOT_REQUIRED, enumAsRef = true)
-        @Size(max = 50, message = "The field must be 50 characters or less")
-        RoleName roleName,
-
         @Schema(description = "CEP of the user", example = "80000-000", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         @Size(max = 10, message = "The field must be 10 characters or less")
         String cep,

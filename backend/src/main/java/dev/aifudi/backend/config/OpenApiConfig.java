@@ -6,8 +6,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.tags.Tag;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @OpenAPIDefinition
 @Configuration
@@ -18,7 +21,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(
                         new Info().title("Aifudi API")
-                                .description("Projeto desenvolvido para o Tech Challenge do primeiro módulo do curso de Arquitetura e desenvolvimento JAVA")
+                                .description("This project was developed for the Tech Challenge of the first module of the Arquitetura e Desenvolvimento em JAVA course.")
                                 .version("v0.0.1")
                 )
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
@@ -27,6 +30,14 @@ public class OpenApiConfig {
                                 .name("basicAuth")
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("basic")
-                ));
+                ))
+                .tags(List.of(
+                        new Tag().name("Register User").description("Create new accounts"),
+                        new Tag().name("Get all users").description("List system users"),
+                        new Tag().name("Update user profile").description("Modify profile data"),
+                        new Tag().name("Update Password").description("Change credentials"),
+                        new Tag().name("Delete user profile").description("Remove accounts")
+                ))
+                ;
     }
 }

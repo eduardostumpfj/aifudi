@@ -1,18 +1,22 @@
 package dev.aifudi.backend.controllers.handlers;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import dev.aifudi.backend.dtos.erros.ErrorDTO;
 import dev.aifudi.backend.dtos.erros.ValidationErrorDTO;
 import dev.aifudi.backend.services.exceptions.*;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -39,7 +43,7 @@ public class ControllerExceptionHandler {
             MethodArgumentNotValidException.class,
             InvalidRegisterException.class,
             MissingServletRequestParameterException.class,
-            InvalidParamException.class
+            InvalidParamException.class,
     })
     public ResponseEntity<ValidationErrorDTO> handleMethodValidationException (Exception e){
         var status = HttpStatus.BAD_REQUEST;
@@ -84,5 +88,21 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ErrorDTO> handleFailedAuthException (FailedAuthException error){
         var status = HttpStatus.UNAUTHORIZED;
         return ResponseEntity.status(status.value()).body(new ErrorDTO(error.getMessage(), status.value()));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorDTO> handleInvalidRoleException (HttpMessageNotReadableException error){
+        var status = HttpStatus.BAD_REQUEST;
+        String fullMessage = error.getMostSpecificCause().getMessage();
+        if(fullMessage.contains("roleName")){
+            Throwable cause = error.getCause();
+            if(cause instanceof InvalidFormatException invalid){
+               Object value = invalid.getValue();
+               String errorMessage = "roleName: " + value + " is not an option";
+               return ResponseEntity.status(status.value()).body(new ErrorDTO(errorMessage, status.value()));
+            }
+        }
+
+        return ResponseEntity.status(status.value()).build();
     }
 }

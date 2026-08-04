@@ -20,7 +20,7 @@ public class RoleRepositoryImp implements RoleRepository {
     public Optional<Role> findRoleByName(RoleName name) {
         return this.jdbcClient
                 .sql("SELECT * FROM roles WHERE name = :name")
-                .param("name", name)
+                .param("name", String.valueOf(name))
                 .query(Role.class)
                 .optional();
     }

@@ -1,0 +1,924 @@
+{
+  "info": {
+    "_postman_id": "357ce491-bba6-4bc2-91c0-c18b9fb244ef",
+    "name": "Aifudi",
+    "description": "# Tech Challenge API - Módulo 1 - Usuários\n\nEsta coleção contém todos os _endpoints_ disponíveis para testar a API desenvolvida.\n\nNela, será possível:\n\n- **Criar usuários**\n    \n- **Buscar usuários por nome**\n    \n- **Atualizar o perfil de um usuário**\n    \n- **Atualizar a senha de um usuário**\n    \n- **Excluir um usuário**\n    \n\n## Ambiente\n\nAs requisições desta coleção tem a variável de ambiente **{{BASEURL}}** para o endereço: `localhost:8080/v1/users`\n\n## Perfis de usuário (roles)\n\nA Aplicação conta com o seguintes perfis cadastrados no sistema:\n\n- **ADMIN**\n    \n- **OWNER**\n    \n- **USER**\n    \n\n## Autenticação\n\nPor definição, com exceção do endpoint de criação de usuário, todas as rotas exigem autenticação.\n\nPara facilitar os testes, o projeto já vem com uma conta administrativa e uma de usuário pré-cadastrada no banco de dados. Por padrão, está coleção vem com a autenticação administrativa.\n\n#### Admin:\n\n- **Email:** `admin@aifudi.com`\n    \n- **Password:** `admin123`\n    \n- **Role:** `ADMIN`\n    \n\n#### Usuário:\n\n- **Email:** `mariasantos@gmail.com`\n    \n- **Password:** `maria123`\n    \n- **Role:** `USER`",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "37229492"
+  },
+  "item": [
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "Atualizar Cadastro",
+          "item": [
+            {
+              "name": "Atualizar Cadastro - 'USER'",
+              "request": {
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "mariasantos@gmail.com.br",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "maria123",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "url": {
+                  "raw": "{{BASEURL}}/mariasantos@gmail.com",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "mariasantos@gmail.com"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Sucesso",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\":\"Maria dos Santos\",\n    \"cep\":\"9876543\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASEURL}}/mariasantos@gmail.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "mariasantos@gmail.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Erro nos campos",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"email\": \"mariasantos\",\n    \"state\":\"Paraná\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASEURL}}/mariasantos@gmail.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "mariasantos@gmail.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Erro - Atualizar outro usuário",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\":\"Luiz\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASEURL}}/luiz@gmail.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "luiz@gmail.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            },
+            {
+              "name": "Atualizar Cadastro - 'ADMIN'",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "url": {
+                  "raw": "{{BASEURL}}/admin@aifudi.com",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "admin@aifudi.com"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Sucesso - Mesmo usuário",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\":\"admin\",\n    \"cep\":\"98765-432\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASEURL}}/admin@aifudi.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "admin@aifudi.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Sucesso - Outro usuário",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\":\"maria dos santos\",\n    \"cep\":\"11111-111\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASEURL}}/mariasantos@gmail.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "mariasantos@gmail.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Erro - Usuário não encontrado",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"Luiz Augusto\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASEURL}}/luiz@gmail.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "luiz@gmail.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            },
+            {
+              "name": "Atualizar Cadastro - Erro de Autenticação",
+              "request": {
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "admin@aifudi.com",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "maria123",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"admin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASEURL}}/admin@aifudi.com",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "admin@aifudi.com"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Deletar Usuário",
+          "item": [
+            {
+              "name": "Deletar - 'USER'",
+              "request": {
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "password",
+                      "value": "jose123",
+                      "type": "string"
+                    },
+                    {
+                      "key": "username",
+                      "value": "josedasilva@gmail.com",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{BASEURL}}",
+                  "host": [
+                    "{{BASEURL}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Sucesso",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASEURL}}/josedasilva@gmail.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "josedasilva@gmail.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Erro - Deletar outro usuário",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASEURL}}/jose@gmail.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "jose@gmail.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            },
+            {
+              "name": "Deletar  - Erro de Autenticação",
+              "request": {
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "password",
+                      "value": "maria123",
+                      "type": "string"
+                    },
+                    {
+                      "key": "username",
+                      "value": "admin@aifudi.com",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{BASEURL}}/josedasilva@gmail.com",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "josedasilva@gmail.com"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Deletar  - 'ADMIN'",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{BASEURL}}",
+                  "host": [
+                    "{{BASEURL}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Sucesso - Outro usuário",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASEURL}}/josedasilva@gmail.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "josedasilva@gmail.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Sucesso - Mesmo Usuário",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASEURL}}/admin@aifudi.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "admin@aifudi.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                },
+                {
+                  "name": "Erro - Usuário não econtrado",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASEURL}}/luiz@gmail.com",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "luiz@gmail.com"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": null,
+                  "header": null,
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Buscar usuários por nome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASEURL}}",
+              "host": [
+                "{{BASEURL}}"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Successo",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASEURL}}?name=a&size=10&page=1",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "a"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "Erro - Parâmetros errados",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASEURL}}?email=admin@aifudi.com",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "email",
+                      "value": "admin@aifudi.com"
+                    }
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            }
+          ]
+        },
+        {
+          "name": "Cadastrar Usuário",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{BASEURL}}/register",
+              "host": [
+                "{{BASEURL}}"
+              ],
+              "path": [
+                "register"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Sucesso",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"José da Silva\",\n  \"email\": \"josedasilva@gmail.com\",\n  \"password\": \"jose123\",\n  \"roleName\": \"OWNER\",\n  \"cep\": \"80000-000\",\n  \"state\": \"PR\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"111\",\n  \"complement\": \"apt-202\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASEURL}}/register",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "Erro - Cadastro de \"Admin\"",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Maria da Silva\",\n  \"email\": \"mariadasilva@gmail.com\",\n  \"password\": \"maria123\",\n  \"roleName\": \"ADMIN\",\n  \"cep\": \"80000-000\",\n  \"state\": \"PR\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"111\",\n  \"complement\": \"apt-202\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASEURL}}/register",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "Erro - Email já cadastrado",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Maria da Silva\",\n  \"email\": \"mariasantos@gmail.com\",\n  \"password\": \"maria123\",\n  \"roleName\": \"OWNER\",\n  \"cep\": \"80000-000\",\n  \"state\": \"PR\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"111\",\n  \"complement\": \"apt-202\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASEURL}}/register",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "Erro - Erro nos campos",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"José da Silva Francisco de Paula Miguel Rafael Gonzaga de Albuquerque e Bragança de Vasconcelos e Castro de Oliveira\",\n  \"email\": \"josedasilva\",\n  \"password\": \"jose123\",\n  \"roleName\": \"USER\",\n  \"cep\": \"80000-000\",\n  \"state\": \"Paraná\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"\",\n  \"complement\": \"apt-202\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASEURL}}/register",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            }
+          ]
+        },
+        {
+          "name": "Atualizar Senha",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{BASEURL}}/admin@aifudi.com/password",
+              "host": [
+                "{{BASEURL}}"
+              ],
+              "path": [
+                "admin@aifudi.com",
+                "password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Sucesso",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"password\": \"admin1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASEURL}}/admin@aifudi.com/password",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "admin@aifudi.com",
+                    "password"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "",
+              "header": [],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": ""
+            },
+            {
+              "name": "Erro - Atualizar outro Usuário",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"password\": \"maria1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASEURL}}/mariasantos@gmail.com/password",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "mariasantos@gmail.com",
+                    "password"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            },
+            {
+              "name": "Erro - Erro nos campos",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\":\"1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASEURL}}/admin@aifudi.com/password",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "admin@aifudi.com",
+                    "password"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": null,
+              "header": null,
+              "cookie": [],
+              "body": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "password",
+        "value": "admin123",
+        "type": "string"
+      },
+      {
+        "key": "username",
+        "value": "admin@aifudi.com",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASEURL",
+      "value": ""
+    }
+  ]
+}

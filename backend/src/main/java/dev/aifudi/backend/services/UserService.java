@@ -129,6 +129,7 @@ public class UserService {
         Integer offset = null;
         if(page != null && size != null){
             offset = (page - 1) * size;
+            if(offset < 0) { offset = 0; }
         }
 
         return this.userRepositoryImp.findAllByName(name, size, offset);
@@ -141,5 +142,4 @@ public class UserService {
         }
         return role.get();
     }
-
 }

@@ -3,6 +3,7 @@ package dev.aifudi.backend.services;
 import dev.aifudi.backend.dtos.request.UserRegisterRequestDTO;
 import dev.aifudi.backend.entities.Role;
 import dev.aifudi.backend.entities.User;
+import dev.aifudi.backend.enums.RoleName;
 import dev.aifudi.backend.repositories.RoleRepositoryImp;
 import dev.aifudi.backend.services.exceptions.AccessDeniedException;
 import dev.aifudi.backend.services.exceptions.NotFoundException;
@@ -19,7 +20,7 @@ public class PermissionService {
     }
 
     public void checkRegisterUserPermission(UserRegisterRequestDTO userRequest){
-        if(userRequest.roleName().equals("admin")){
+        if(userRequest.roleName() == RoleName.ADMIN){
             throw new AccessDeniedException("Not allowed to create a admin user");
         }
     }
@@ -30,7 +31,7 @@ public class PermissionService {
             throw new NotFoundException("Role not found");
         }
 
-         boolean isAdmin = userRole.get().getName().equals("admin");
+         boolean isAdmin = userRole.get().getName() == RoleName.ADMIN;
          boolean isOwnerOfAccount = authUser.getEmail().equals(requestEmail);
 
          if (!isAdmin && !isOwnerOfAccount) {
@@ -44,7 +45,7 @@ public class PermissionService {
              throw new NotFoundException("Role not found");
          }
 
-         boolean isAdmin = userRole.get().getName().equals("admin");
+         boolean isAdmin = userRole.get().getName() == RoleName.ADMIN;
          boolean isOwnerOfAccount = authUser.getEmail().equals(requestEmail);
 
          if (!isAdmin && !isOwnerOfAccount) {
