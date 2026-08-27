@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "357ce491-bba6-4bc2-91c0-c18b9fb244ef",
+    "_postman_id": "a97534ef-eabd-4cc8-bed5-390297fc86e7",
     "name": "Aifudi",
-    "description": "# Tech Challenge API - Módulo 1 - Usuários\n\nEsta coleção contém todos os _endpoints_ disponíveis para testar a API desenvolvida.\n\nNela, será possível:\n\n- **Criar usuários**\n    \n- **Buscar usuários por nome**\n    \n- **Atualizar o perfil de um usuário**\n    \n- **Atualizar a senha de um usuário**\n    \n- **Excluir um usuário**\n    \n\n## Ambiente\n\nAs requisições desta coleção tem a variável de ambiente **{{BASEURL}}** para o endereço: `localhost:8080/v1/users`\n\n## Perfis de usuário (roles)\n\nA Aplicação conta com o seguintes perfis cadastrados no sistema:\n\n- **ADMIN**\n    \n- **OWNER**\n    \n- **USER**\n    \n\n## Autenticação\n\nPor definição, com exceção do endpoint de criação de usuário, todas as rotas exigem autenticação.\n\nPara facilitar os testes, o projeto já vem com uma conta administrativa e uma de usuário pré-cadastrada no banco de dados. Por padrão, está coleção vem com a autenticação administrativa.\n\n#### Admin:\n\n- **Email:** `admin@aifudi.com`\n    \n- **Password:** `admin123`\n    \n- **Role:** `ADMIN`\n    \n\n#### Usuário:\n\n- **Email:** `mariasantos@gmail.com`\n    \n- **Password:** `maria123`\n    \n- **Role:** `USER`",
+    "description": "# Tech Challenge API - Módulo 1 - Usuários\n\nEsta coleção contém todos os _endpoints_ disponíveis para testar a API desenvolvida.\n\nNela, será possível:\n\n- **Criar usuários**\n    \n- **Buscar usuários por nome**\n    \n- **Atualizar o perfil de um usuário**\n    \n- **Atualizar a senha de um usuário**\n    \n- **Excluir um usuário**\n    \n\n## Ambiente\n\nAs requisições desta coleção tem a variável de ambiente **{{BASEURL}}** para o endereço: `localhost:8080/v1/users`\n\n## Perfis de usuário (roles)\n\nA Aplicação conta com o seguintes perfis cadastrados no sistema:\n\n- **ADMIN**\n    \n- **OWNER**\n    \n- **USER**\n    \n\n## Autenticação\n\nPor definição, com exceção do endpoint de criação de usuário, todas as rotas exigem autenticação.\n\nPara facilitar os testes, o projeto já vem com uma conta administrativa e uma de usuário pré-cadastrada no banco de dados. Por padrão, está coleção vem com a autenticação administrativa.\n\n#### Admin:\n\n- **Email:** `admin@aifudi.com`\n    \n- **Login:** `admin`\n    \n- **Password:** `{{auth_password_1dkw}}`\n    \n- **Role:** `ADMIN`\n    \n\n#### Usuário:\n\n- **Email:** `mariasantos@gmail.com`\n\n- **Login:** `mariasantos`\n    \n- **Password:** `{{auth_password_1d4h}}`\n    \n- **Role:** `USER`",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "37229492"
+    "_exporter_id": "8513640"
   },
   "item": [
     {
@@ -21,12 +21,12 @@
                   "basic": [
                     {
                       "key": "username",
-                      "value": "mariasantos@gmail.com.br",
+                      "value": "mariasantos",
                       "type": "string"
                     },
                     {
                       "key": "password",
-                      "value": "maria123",
+                      "value": "{{auth_password_1d4h}}",
                       "type": "string"
                     }
                   ]
@@ -65,19 +65,19 @@
                       }
                     },
                     "url": {
-                      "raw": "{{BASEURL}}/mariasantos@gmail.com",
+                      "raw": "{{BASEURL}}/mariasantos",
                       "host": [
                         "{{BASEURL}}"
                       ],
                       "path": [
-                        "mariasantos@gmail.com"
+                        "mariasantos"
                       ]
                     }
                   },
-                  "_postman_previewlanguage": null,
-                  "header": null,
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
                   "cookie": [],
-                  "body": null
+                  "body": ""
                 },
                 {
                   "name": "Erro nos campos",
@@ -100,19 +100,19 @@
                       }
                     },
                     "url": {
-                      "raw": "{{BASEURL}}/mariasantos@gmail.com",
+                      "raw": "{{BASEURL}}/mariasantos",
                       "host": [
                         "{{BASEURL}}"
                       ],
                       "path": [
-                        "mariasantos@gmail.com"
+                        "mariasantos"
                       ]
                     }
                   },
-                  "_postman_previewlanguage": null,
-                  "header": null,
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
                   "cookie": [],
-                  "body": null
+                  "body": ""
                 },
                 {
                   "name": "Erro - Atualizar outro usuário",
@@ -135,19 +135,19 @@
                       }
                     },
                     "url": {
-                      "raw": "{{BASEURL}}/luiz@gmail.com",
+                      "raw": "{{BASEURL}}/luiz",
                       "host": [
                         "{{BASEURL}}"
                       ],
                       "path": [
-                        "luiz@gmail.com"
+                        "luiz"
                       ]
                     }
                   },
-                  "_postman_previewlanguage": null,
-                  "header": null,
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
                   "cookie": [],
-                  "body": null
+                  "body": ""
                 }
               ]
             },
@@ -188,19 +188,19 @@
                       }
                     },
                     "url": {
-                      "raw": "{{BASEURL}}/admin@aifudi.com",
+                      "raw": "{{BASEURL}}/admin",
                       "host": [
                         "{{BASEURL}}"
                       ],
                       "path": [
-                        "admin@aifudi.com"
+                        "admin"
                       ]
                     }
                   },
-                  "_postman_previewlanguage": null,
-                  "header": null,
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
                   "cookie": [],
-                  "body": null
+                  "body": ""
                 },
                 {
                   "name": "Sucesso - Outro usuário",
@@ -223,19 +223,19 @@
                       }
                     },
                     "url": {
-                      "raw": "{{BASEURL}}/mariasantos@gmail.com",
+                      "raw": "{{BASEURL}}/mariasantos",
                       "host": [
                         "{{BASEURL}}"
                       ],
                       "path": [
-                        "mariasantos@gmail.com"
+                        "mariasantos"
                       ]
                     }
                   },
-                  "_postman_previewlanguage": null,
-                  "header": null,
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
                   "cookie": [],
-                  "body": null
+                  "body": ""
                 },
                 {
                   "name": "Erro - Usuário não encontrado",
@@ -258,19 +258,19 @@
                       }
                     },
                     "url": {
-                      "raw": "{{BASEURL}}/luiz@gmail.com",
+                      "raw": "{{BASEURL}}/luiz",
                       "host": [
                         "{{BASEURL}}"
                       ],
                       "path": [
-                        "luiz@gmail.com"
+                        "luiz"
                       ]
                     }
                   },
-                  "_postman_previewlanguage": null,
-                  "header": null,
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
                   "cookie": [],
-                  "body": null
+                  "body": ""
                 }
               ]
             },
@@ -282,12 +282,12 @@
                   "basic": [
                     {
                       "key": "username",
-                      "value": "admin@aifudi.com",
+                      "value": "admin2",
                       "type": "string"
                     },
                     {
                       "key": "password",
-                      "value": "maria123",
+                      "value": "{{auth_password_1dkw}}",
                       "type": "string"
                     }
                   ]
@@ -296,7 +296,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"admin\"\n}",
+                  "raw": "{\n    \"name\": \"admin2\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -304,12 +304,12 @@
                   }
                 },
                 "url": {
-                  "raw": "{{BASEURL}}/admin@aifudi.com",
+                  "raw": "{{BASEURL}}/admin",
                   "host": [
                     "{{BASEURL}}"
                   ],
                   "path": [
-                    "admin@aifudi.com"
+                    "admin"
                   ]
                 }
               },
@@ -327,13 +327,13 @@
                   "type": "basic",
                   "basic": [
                     {
-                      "key": "password",
-                      "value": "jose123",
+                      "key": "username",
+                      "value": "josedasilva",
                       "type": "string"
                     },
                     {
-                      "key": "username",
-                      "value": "josedasilva@gmail.com",
+                      "key": "password",
+                      "value": "jose123",
                       "type": "string"
                     }
                   ]
@@ -349,44 +349,44 @@
               },
               "response": [
                 {
-                  "name": "Sucesso",
-                  "originalRequest": {
-                    "method": "DELETE",
-                    "header": [],
-                    "url": {
-                      "raw": "{{BASEURL}}/josedasilva@gmail.com",
-                      "host": [
-                        "{{BASEURL}}"
-                      ],
-                      "path": [
-                        "josedasilva@gmail.com"
-                      ]
-                    }
-                  },
-                  "_postman_previewlanguage": null,
-                  "header": null,
-                  "cookie": [],
-                  "body": null
-                },
-                {
                   "name": "Erro - Deletar outro usuário",
                   "originalRequest": {
                     "method": "DELETE",
                     "header": [],
                     "url": {
-                      "raw": "{{BASEURL}}/jose@gmail.com",
+                      "raw": "{{BASEURL}}/jose",
                       "host": [
                         "{{BASEURL}}"
                       ],
                       "path": [
-                        "jose@gmail.com"
+                        "jose"
                       ]
                     }
                   },
-                  "_postman_previewlanguage": null,
-                  "header": null,
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
                   "cookie": [],
-                  "body": null
+                  "body": ""
+                },
+                {
+                  "name": "Sucesso",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASEURL}}/josedasilva",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "josedasilva"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
                 }
               ]
             },
@@ -397,13 +397,13 @@
                   "type": "basic",
                   "basic": [
                     {
-                      "key": "password",
-                      "value": "maria123",
+                      "key": "username",
+                      "value": "admin2",
                       "type": "string"
                     },
                     {
-                      "key": "username",
-                      "value": "admin@aifudi.com",
+                      "key": "password",
+                      "value": "{{auth_password_1d4h}}",
                       "type": "string"
                     }
                   ]
@@ -411,12 +411,12 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{BASEURL}}/josedasilva@gmail.com",
+                  "raw": "{{BASEURL}}/josedasilva",
                   "host": [
                     "{{BASEURL}}"
                   ],
                   "path": [
-                    "josedasilva@gmail.com"
+                    "josedasilva"
                   ]
                 }
               },
@@ -441,39 +441,19 @@
                     "method": "DELETE",
                     "header": [],
                     "url": {
-                      "raw": "{{BASEURL}}/josedasilva@gmail.com",
+                      "raw": "{{BASEURL}}/josedasilva",
                       "host": [
                         "{{BASEURL}}"
                       ],
                       "path": [
-                        "josedasilva@gmail.com"
+                        "josedasilva"
                       ]
                     }
                   },
-                  "_postman_previewlanguage": null,
-                  "header": null,
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
                   "cookie": [],
-                  "body": null
-                },
-                {
-                  "name": "Sucesso - Mesmo Usuário",
-                  "originalRequest": {
-                    "method": "DELETE",
-                    "header": [],
-                    "url": {
-                      "raw": "{{BASEURL}}/admin@aifudi.com",
-                      "host": [
-                        "{{BASEURL}}"
-                      ],
-                      "path": [
-                        "admin@aifudi.com"
-                      ]
-                    }
-                  },
-                  "_postman_previewlanguage": null,
-                  "header": null,
-                  "cookie": [],
-                  "body": null
+                  "body": ""
                 },
                 {
                   "name": "Erro - Usuário não econtrado",
@@ -481,19 +461,39 @@
                     "method": "DELETE",
                     "header": [],
                     "url": {
-                      "raw": "{{BASEURL}}/luiz@gmail.com",
+                      "raw": "{{BASEURL}}/luiz",
                       "host": [
                         "{{BASEURL}}"
                       ],
                       "path": [
-                        "luiz@gmail.com"
+                        "luiz"
                       ]
                     }
                   },
-                  "_postman_previewlanguage": null,
-                  "header": null,
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
                   "cookie": [],
-                  "body": null
+                  "body": ""
+                },
+                {
+                  "name": "Sucesso - Mesmo Usuário",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASEURL}}/admin",
+                      "host": [
+                        "{{BASEURL}}"
+                      ],
+                      "path": [
+                        "admin"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "Text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
                 }
               ]
             }
@@ -545,10 +545,10 @@
                   ]
                 }
               },
-              "_postman_previewlanguage": null,
-              "header": null,
+              "_postman_previewlanguage": "Text",
+              "header": [],
               "cookie": [],
-              "body": null
+              "body": ""
             },
             {
               "name": "Erro - Parâmetros errados",
@@ -568,10 +568,10 @@
                   ]
                 }
               },
-              "_postman_previewlanguage": null,
-              "header": null,
+              "_postman_previewlanguage": "Text",
+              "header": [],
               "cookie": [],
-              "body": null
+              "body": ""
             }
           ]
         },
@@ -611,7 +611,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"José da Silva\",\n  \"email\": \"josedasilva@gmail.com\",\n  \"password\": \"jose123\",\n  \"roleName\": \"OWNER\",\n  \"cep\": \"80000-000\",\n  \"state\": \"PR\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"111\",\n  \"complement\": \"apt-202\"\n}",
+                  "raw": "{\n  \"name\": \"José da Silva\",\n  \"email\": \"josedasilva@gmail.com\",\n  \"login\": \"josedasilva\",\n  \"password\": \"jose123\",\n  \"roleName\": \"OWNER\",\n  \"cep\": \"80000-000\",\n  \"state\": \"PR\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"111\",\n  \"complement\": \"apt-202\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -628,10 +628,10 @@
                   ]
                 }
               },
-              "_postman_previewlanguage": null,
-              "header": null,
+              "_postman_previewlanguage": "Text",
+              "header": [],
               "cookie": [],
-              "body": null
+              "body": ""
             },
             {
               "name": "Erro - Cadastro de \"Admin\"",
@@ -646,7 +646,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Maria da Silva\",\n  \"email\": \"mariadasilva@gmail.com\",\n  \"password\": \"maria123\",\n  \"roleName\": \"ADMIN\",\n  \"cep\": \"80000-000\",\n  \"state\": \"PR\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"111\",\n  \"complement\": \"apt-202\"\n}",
+                  "raw": "{\n  \"name\": \"Maria da Silva\",\n  \"email\": \"mariadasilva@gmail.com\",\n  \"login\": \"mariadasilva\",\n  \"password\": \"{{auth_password_1d4h}}\",\n  \"roleName\": \"ADMIN\",\n  \"cep\": \"80000-000\",\n  \"state\": \"PR\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"111\",\n  \"complement\": \"apt-202\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -663,10 +663,10 @@
                   ]
                 }
               },
-              "_postman_previewlanguage": null,
-              "header": null,
+              "_postman_previewlanguage": "Text",
+              "header": [],
               "cookie": [],
-              "body": null
+              "body": ""
             },
             {
               "name": "Erro - Email já cadastrado",
@@ -681,7 +681,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Maria da Silva\",\n  \"email\": \"mariasantos@gmail.com\",\n  \"password\": \"maria123\",\n  \"roleName\": \"OWNER\",\n  \"cep\": \"80000-000\",\n  \"state\": \"PR\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"111\",\n  \"complement\": \"apt-202\"\n}",
+                  "raw": "{\n  \"name\": \"Maria da Silva\",\n  \"email\": \"mariasantos@gmail.com\",\n  \"login\": \"mariaSantos\",\n  \"password\": \"{{auth_password_1d4h}}\",\n  \"roleName\": \"OWNER\",\n  \"cep\": \"80000-000\",\n  \"state\": \"PR\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"111\",\n  \"complement\": \"apt-202\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -698,10 +698,45 @@
                   ]
                 }
               },
-              "_postman_previewlanguage": null,
-              "header": null,
+              "_postman_previewlanguage": "Text",
+              "header": [],
               "cookie": [],
-              "body": null
+              "body": ""
+            },
+            {
+              "name": "Erro - Login já cadastrado",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Maria da Silva\",\n  \"email\": \"mariasilva@gmail.com\",\n  \"login\": \"mariasantos\",\n  \"password\": \"{{auth_password_1d4h}}\",\n  \"roleName\": \"OWNER\",\n  \"cep\": \"80000-000\",\n  \"state\": \"PR\",\n  \"city\": \"Curitiba\",\n  \"address\": \"Rua XV de Novembro\",\n  \"number\": \"111\",\n  \"complement\": \"apt-202\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASEURL}}/register",
+                  "host": [
+                    "{{BASEURL}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "_postman_previewlanguage": "Text",
+              "header": [],
+              "cookie": [],
+              "body": ""
             },
             {
               "name": "Erro - Erro nos campos",
@@ -733,10 +768,10 @@
                   ]
                 }
               },
-              "_postman_previewlanguage": null,
-              "header": null,
+              "_postman_previewlanguage": "Text",
+              "header": [],
               "cookie": [],
-              "body": null
+              "body": ""
             }
           ]
         },
@@ -770,7 +805,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"password\": \"admin1234\"\n}",
+                  "raw": "{\n    \"password\": \"{{auth_password_1dkw}}4\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -778,17 +813,17 @@
                   }
                 },
                 "url": {
-                  "raw": "{{BASEURL}}/admin@aifudi.com/password",
+                  "raw": "{{BASEURL}}/admin/password",
                   "host": [
                     "{{BASEURL}}"
                   ],
                   "path": [
-                    "admin@aifudi.com",
+                    "admin",
                     "password"
                   ]
                 }
               },
-              "_postman_previewlanguage": "",
+              "_postman_previewlanguage": "Text",
               "header": [],
               "cookie": [
                 {
@@ -812,7 +847,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"password\": \"maria1234\"\n}",
+                  "raw": "{\n    \"password\": \"{{auth_password_1d4h}}4\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -820,20 +855,20 @@
                   }
                 },
                 "url": {
-                  "raw": "{{BASEURL}}/mariasantos@gmail.com/password",
+                  "raw": "{{BASEURL}}/mariasantos/password",
                   "host": [
                     "{{BASEURL}}"
                   ],
                   "path": [
-                    "mariasantos@gmail.com",
+                    "mariasantos",
                     "password"
                   ]
                 }
               },
-              "_postman_previewlanguage": null,
-              "header": null,
+              "_postman_previewlanguage": "Text",
+              "header": [],
               "cookie": [],
-              "body": null
+              "body": ""
             },
             {
               "name": "Erro - Erro nos campos",
@@ -856,20 +891,20 @@
                   }
                 },
                 "url": {
-                  "raw": "{{BASEURL}}/admin@aifudi.com/password",
+                  "raw": "{{BASEURL}}/admin/password",
                   "host": [
                     "{{BASEURL}}"
                   ],
                   "path": [
-                    "admin@aifudi.com",
+                    "admin",
                     "password"
                   ]
                 }
               },
-              "_postman_previewlanguage": null,
-              "header": null,
+              "_postman_previewlanguage": "Text",
+              "header": [],
               "cookie": [],
-              "body": null
+              "body": ""
             }
           ]
         }
@@ -880,13 +915,13 @@
     "type": "basic",
     "basic": [
       {
-        "key": "password",
-        "value": "admin123",
+        "key": "username",
+        "value": "admin",
         "type": "string"
       },
       {
-        "key": "username",
-        "value": "admin@aifudi.com",
+        "key": "password",
+        "value": "{{auth_password_1dkw}}",
         "type": "string"
       }
     ]
@@ -919,6 +954,14 @@
     {
       "key": "BASEURL",
       "value": ""
+    },
+    {
+      "key": "auth_password_1d4h",
+      "secret": true
+    },
+    {
+      "key": "auth_password_1dkw",
+      "secret": true
     }
   ]
 }

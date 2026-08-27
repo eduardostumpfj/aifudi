@@ -58,12 +58,18 @@ CREATE TABLE address (
     address VARCHAR(100) NOT NULL,
     address_number VARCHAR(10) NOT NULL,
     complement VARCHAR(100),
+    updated_at timestamptz,
 
     CONSTRAINT fk_user
       FOREIGN KEY (user_id)
       REFERENCES users(id)
       ON DELETE CASCADE
 );
+
+CREATE TRIGGER update_address_timestamp
+  BEFORE UPDATE ON address
+  FOR EACH ROW
+  EXECUTE FUNCTION trigger_set_timestamp();
 
 
 -- INSERT ADMIN USER -------------------------------------
