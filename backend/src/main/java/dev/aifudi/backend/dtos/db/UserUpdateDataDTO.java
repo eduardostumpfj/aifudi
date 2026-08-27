@@ -12,6 +12,8 @@ public record UserUpdateDataDTO(
 
         String email,
 
+        String  login,
+
         String hashedPassword
 ) {
 }

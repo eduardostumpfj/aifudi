@@ -9,6 +9,7 @@ public record UserProfileDTO(
         UUID id,
         String name,
         String email,
+        String login,
         RoleName roleName,
         String cep,
         String state,

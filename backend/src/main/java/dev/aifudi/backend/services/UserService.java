@@ -54,6 +54,7 @@ public class UserService {
                 null,
                 user.name(),
                 user.email(),
+                user.login(),
                 hashedPassword,
                 role.getId()
         ));
@@ -73,16 +74,17 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUserRegister(UserUpdateRequestDTO updateUser, String requestEmail){
+    public void updateUserRegister(UserUpdateRequestDTO updateUser, String requestLogin){
         // Update User
         // Get URL User
-        UserProfileDTO foundUser = this.userRepositoryImp.findByEmail(requestEmail).orElseThrow(() -> new NotFoundException("User not Found"));
+        UserProfileDTO foundUser = this.userRepositoryImp.findByLogin(requestLogin).orElseThrow(() -> new NotFoundException("User not Found"));
 
         // In this route app users cannot change their roles.
         UserUpdateDataDTO userData = new UserUpdateDataDTO(
                 foundUser.id(),
                 updateUser.name(),
                 updateUser.email(),
+                updateUser.login(),
                 null
         );
         this.userRepositoryImp.update(userData);
@@ -100,8 +102,8 @@ public class UserService {
         this.addressRepositoryImp.update(addressData);
     }
 
-    public void deleteUserRegister(String requestEmail){
-        UserProfileDTO foundUser = this.userRepositoryImp.findByEmail(requestEmail).orElseThrow(() -> new NotFoundException("User not Found"));
+    public void deleteUserRegister(String requestLogin){
+        UserProfileDTO foundUser = this.userRepositoryImp.findByLogin(requestLogin).orElseThrow(() -> new NotFoundException("User not Found"));
         this.userRepositoryImp.delete(foundUser.id());
     }
 
@@ -117,6 +119,7 @@ public class UserService {
 
         UserUpdateDataDTO userData = new UserUpdateDataDTO(
                 authUser.getId(),
+                null,
                 null,
                 null,
                 hashedPassword

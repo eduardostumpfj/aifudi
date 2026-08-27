@@ -25,36 +25,36 @@ public class PermissionService {
         }
     }
 
-     public void checkRegisterUpdatePermission(User authUser, String requestEmail){
+     public void checkRegisterUpdatePermission(User authUser, String requestLogin){
         Optional<Role> userRole = this.roleRepositoryImp.findRoleById(authUser.getRoleId());
         if(userRole.isEmpty()){
             throw new NotFoundException("Role not found");
         }
 
          boolean isAdmin = userRole.get().getName() == RoleName.ADMIN;
-         boolean isOwnerOfAccount = authUser.getEmail().equals(requestEmail);
+         boolean isOwnerOfAccount = authUser.getLogin().equals(requestLogin);
 
          if (!isAdmin && !isOwnerOfAccount) {
              throw new AccessDeniedException("Not allowed to change another user's data");
          }
      }
 
-     public void checkDeleteUserPermission(User authUser, String requestEmail){
+     public void checkDeleteUserPermission(User authUser, String requestLogin){
          Optional<Role> userRole = this.roleRepositoryImp.findRoleById(authUser.getRoleId());
          if(userRole.isEmpty()){
              throw new NotFoundException("Role not found");
          }
 
          boolean isAdmin = userRole.get().getName() == RoleName.ADMIN;
-         boolean isOwnerOfAccount = authUser.getEmail().equals(requestEmail);
+         boolean isOwnerOfAccount = authUser.getLogin().equals(requestLogin);
 
          if (!isAdmin && !isOwnerOfAccount) {
              throw new AccessDeniedException("Not allowed to delete another user's register");
          }
      }
 
-     public void checkResetPasswordPermission(User authUser, String requestEmail){
-        if(!authUser.getEmail().equals(requestEmail)){
+     public void checkResetPasswordPermission(User authUser, String requestLogin){
+        if(!authUser.getLogin().equals(requestLogin)){
             throw new AccessDeniedException("Not allowed to reset another user's password");
         }
      }

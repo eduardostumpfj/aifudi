@@ -31,11 +31,11 @@ public class AuthService {
         byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
         String credentials = new String(credDecoded, StandardCharsets.UTF_8);
         String[] values = credentials.split(":", 2);
-        String userEmail = values[0];
+        String userLogin = values[0];
         String userPassword = values[1];
 
         // Find user
-        Optional<User> foundUser = this.userRepositoryImp.findAuthUser(userEmail);
+        Optional<User> foundUser = this.userRepositoryImp.findAuthUser(userLogin);
         if(foundUser.isEmpty()){
             throw new FailedAuthException("Invalid Credentials");
         }

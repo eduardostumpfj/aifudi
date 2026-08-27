@@ -12,6 +12,10 @@ public record UserUpdateRequestDTO(
         @Size(max = 100, message = "The field must be 100 characters or less")
         String email,
 
+        @Schema(description = "Login of the user", example = "josedasilva", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        @Size(max = 100, message = "The field must be 100 characters or less")
+        String login,
+
         @Schema(description = "Name of the user", example = "José da Silva", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         @Size(max = 100, message = "The field must be 100 characters or less")
         String name,

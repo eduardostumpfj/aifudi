@@ -22,6 +22,11 @@ public record UserRegisterRequestDTO(
 
         @NotBlank
         @Size(max = 100, message = "The field must be 100 characters or less")
+        @Schema(description = "Login of the user", example = "josedasilva", requiredMode = Schema.RequiredMode.REQUIRED)
+        String login,
+
+        @NotBlank
+        @Size(max = 100, message = "The field must be 100 characters or less")
         @Schema(description = "Password of the user", example = "jose123", requiredMode = Schema.RequiredMode.REQUIRED)
         String password,
 

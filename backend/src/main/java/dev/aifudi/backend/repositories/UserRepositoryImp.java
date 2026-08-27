@@ -24,6 +24,7 @@ public class UserRepositoryImp implements UserRepository{
                         "    u.id, " +
                         "    u.name," +
                         "    u.email," +
+                        "    u.login," +
                         "    r.name AS role_name," +
                         "    a.id AS addressId, " +
                         "    a.cep," +
@@ -50,6 +51,7 @@ public class UserRepositoryImp implements UserRepository{
                         "    u.id, " +
                         "    u.name," +
                         "    u.email," +
+                        "    u.login," +
                         "    r.name AS role_name," +
                         "    a.cep," +
                         "    a.state," +
@@ -69,10 +71,36 @@ public class UserRepositoryImp implements UserRepository{
     }
 
     @Override
-    public Optional<User> findAuthUser(String email) {
+    public Optional<UserProfileDTO> findByLogin(String login) {
         return this.jdbcClient
-                .sql("SELECT * FROM users WHERE email = :email;")
-                .param("email", email)
+                .sql("SELECT" +
+                        "    u.id, " +
+                        "    u.name," +
+                        "    u.email," +
+                        "    u.login," +
+                        "    r.name AS role_name," +
+                        "    a.cep," +
+                        "    a.state," +
+                        "    a.city," +
+                        "    a.address," +
+                        "    a.address_number AS number," +
+                        "    a.complement " +
+                        "FROM users u " +
+                        "INNER JOIN address a " +
+                        "    ON u.id = a.user_id " +
+                        "INNER JOIN roles r " +
+                        "    ON u.role_id = r.id " +
+                        "WHERE u.login = :login;")
+                .param("login", login)
+                .query(UserProfileDTO.class)
+                .optional();
+    }
+
+    @Override
+    public Optional<User> findAuthUser(String login) {
+        return this.jdbcClient
+                .sql("SELECT * FROM users WHERE login = :login;")
+                .param("login", login)
                 .query(User.class)
                 .optional();
     }
@@ -84,6 +112,7 @@ public class UserRepositoryImp implements UserRepository{
                 "SELECT " +
                         "    u.name," +
                         "    u.email," +
+                        "    u.login," +
                         "    r.name AS role_name," +
                         "    a.cep," +
                         "    a.state," +
@@ -120,10 +149,11 @@ public class UserRepositoryImp implements UserRepository{
     @Override
     public User save(User user) {
         return this.jdbcClient.
-                sql("INSERT INTO users (name, role_id, email, hashed_password ) VALUES (:name, :role_id, :email, :hashed_password) RETURNING id, name, role_id, email, hashed_password")
+                sql("INSERT INTO users (name, role_id, email, login, hashed_password ) VALUES (:name, :role_id, :email, :login, :hashed_password) RETURNING id, name, role_id, email, login, hashed_password")
                 .param("name", user.getName())
                 .param("role_id", user.getRoleId())
                 .param("email", user.getEmail())
+                .param("login", user.getLogin())
                 .param("hashed_password", user.getHashedPassword())
                 .query((rs, rowNum) -> {
                     User savedUser = new User();
@@ -131,6 +161,7 @@ public class UserRepositoryImp implements UserRepository{
                     savedUser.setName(rs.getString("name"));
                     savedUser.setRoleId(rs.getObject("role_id", java.util.UUID.class));
                     savedUser.setEmail(rs.getString("email"));
+                    savedUser.setLogin(rs.getString("login"));
                     savedUser.setHashedPassword(rs.getString("hashed_password"));
                     return savedUser;
                 })
@@ -158,6 +189,11 @@ public class UserRepositoryImp implements UserRepository{
         if (updateData.email() != null) {
             sql.append("email = :email, ");
             params.put("email", updateData.email());
+        }
+
+        if (updateData.login() != null) {
+            sql.append("login = :login, ");
+            params.put("login", updateData.login());
         }
 
         if (updateData.hashedPassword() != null) {

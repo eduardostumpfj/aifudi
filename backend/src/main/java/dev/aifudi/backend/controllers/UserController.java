@@ -43,7 +43,7 @@ public class UserController {
     @Operation(
             tags = "Register User",
             description = "This operation provides support for creating a new user profile in our system." +
-                    "The caller's email must be unique and cannot be used for another account." +
+                    "The caller's email and login must be unique and cannot be used for another account." +
                     "<br>" +
                     "Note: This endpoint does not allow the creation of `ADMIN` users.",
             responses = {
@@ -87,7 +87,7 @@ public class UserController {
         this.permissionService.checkRegisterUserPermission(user);
 
         this.userService.registerUser(user);
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.status(204).build();
     }
 
     @GetMapping
@@ -147,13 +147,13 @@ public class UserController {
 
 
 
-    @PutMapping("/{email}")
+    @PutMapping("/{login}")
     @Operation(
             tags = "Update user profile",
             description = "This operation provides support for updating the details of an existing registered user in the system, " +
                     "determined via the applied request authorization. By default, this call will modify the user record based on the provided payload." +
                     "<br>" +
-                    "The caller must specify the target user utilizing the `email` path parameter and provide the updated data within the request body." +
+                    "The caller must specify the target user utilizing the `login` path parameter and provide the updated data within the request body." +
                     "<br>" +
                     "Note: While regular users are permitted to update their own profile information, modifying another user's record is strictly restricted to accounts with the `ADMIN` role.",
             responses = {
@@ -192,7 +192,7 @@ public class UserController {
 
     )
     public ResponseEntity<Void> updateUserRegister(
-            @PathVariable String email,
+            @PathVariable String login,
 
             @Parameter(hidden = true) @RequestHeader(value = "Authorization")
             String authHeader,
@@ -200,15 +200,15 @@ public class UserController {
             @Valid @RequestBody UserUpdateRequestDTO updateUser
     ){
 
-        logger.info("PUT -> /{email}");
+        logger.info("PUT -> /{login}");
         // check authentication
         User authUser = this.authService.authenticateUser(authHeader);
 
         // Check permission
-        this.permissionService.checkRegisterUpdatePermission(authUser, email);
+        this.permissionService.checkRegisterUpdatePermission(authUser, login);
 
         // Update User
-        this.userService.updateUserRegister(updateUser, email);
+        this.userService.updateUserRegister(updateUser, login);
 
         return ResponseEntity.status(204).build();
     }
@@ -216,13 +216,13 @@ public class UserController {
 
 
 
-    @PutMapping("/{email}/password")
+    @PutMapping("/{login}/password")
     @Operation(
             tags = "Update Password",
             description = "This operation provides support for updating a user's password in our system, " +
                     "determined via the applied request authorization. By default, this call will modify the user password based on the provided payload." +
                     "<br>" +
-                    "The caller must specify the target user utilizing the `email` path parameter and provide the new password within the request body." +
+                    "The caller must specify the target user utilizing the `login` path parameter and provide the new password within the request body." +
                     "<br>" +
                     "Note: This endpoint does not allow resetting another user's password.",
             responses = {
@@ -258,17 +258,17 @@ public class UserController {
             @Valid
             @RequestBody UserResetPasswordRequestDTO password,
 
-            @PathVariable String email,
+            @PathVariable String login,
 
             @Parameter(hidden = true) @RequestHeader(value = "Authorization") String authHeader
             ){
-        logger.info("UPDATE PASSWORD -> /{email}/password");
+        logger.info("UPDATE PASSWORD -> /{login}/password");
 
         // check authentication
         User authUser = this.authService.authenticateUser(authHeader);
 
         // check permissions
-        this.permissionService.checkResetPasswordPermission(authUser, email);
+        this.permissionService.checkResetPasswordPermission(authUser, login);
 
         //Reset Password
         this.userService.resetUserPassword(authUser, password.password());
@@ -276,13 +276,13 @@ public class UserController {
         return ResponseEntity.status(204).build();
     }
 
-    @DeleteMapping("/{email}")
+    @DeleteMapping("/{login}")
     @Operation(
             tags = "Delete user profile",
             description = "This operation provides support for deleting an existing registered user in the system, " +
                     "determined via the applied request authorization. By default, this call will remove the user record based on the provided email. " +
                     "<br>" +
-                    "The caller must specify the target user utilizing the `email` path parameter." +
+                    "The caller must specify the target user utilizing the `login` path parameter." +
                     "<br>" +
                     "Note: While regular users are permitted to delete their own account, deleting another user's account is strictly restricted to accounts with the `ADMIN` role.",
             responses = {
@@ -321,20 +321,20 @@ public class UserController {
 
     )
     public ResponseEntity<Void> deleteRegister(
-            @PathVariable String email,
+            @PathVariable String login,
 
             @Parameter(hidden = true) @RequestHeader(value = "Authorization")
             String authHeader
     ){
-        logger.info("DELETE -> /{email}");
+        logger.info("DELETE -> /{login}");
         // check authentication
         User authUser = this.authService.authenticateUser(authHeader);
 
         // Check permission
-        this.permissionService.checkDeleteUserPermission(authUser, email);
+        this.permissionService.checkDeleteUserPermission(authUser, login);
 
         // Delete User Data (register and address)
-        this.userService.deleteUserRegister(email);
+        this.userService.deleteUserRegister(login);
 
         return ResponseEntity.status(204).build();
     }

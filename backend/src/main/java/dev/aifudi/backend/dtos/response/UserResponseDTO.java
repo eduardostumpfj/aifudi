@@ -12,6 +12,9 @@ public record UserResponseDTO(
         @Schema(description = "Email of the user", example = "josedasilva@gmail.com", requiredMode = Schema.RequiredMode.REQUIRED)
         String email,
 
+        @Schema(description = "Login of the user", example = "josedasilva@gmail.com", requiredMode = Schema.RequiredMode.REQUIRED)
+        String login,
+
         @Schema(description = "Name of the role", example = "OWNER", requiredMode = Schema.RequiredMode.REQUIRED, enumAsRef = true)
         RoleName roleName,
 

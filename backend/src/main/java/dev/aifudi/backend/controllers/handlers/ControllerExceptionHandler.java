@@ -78,9 +78,20 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
-    public ResponseEntity<ErrorDTO> handleDuplicatedEmail(){
+    public ResponseEntity<ErrorDTO> handleDuplicatedEmail(DuplicateKeyException error){
+        String cause = error.getMostSpecificCause().getMessage();
+        String message;
+
+        // Check witch field is duplicated
+        if(cause.contains("users_login_key")){
+            message = "An account with this login already exists";
+        } else if (cause.contains("users_email_key")) {
+            message = "An account with this email already exists";
+        } else {
+            message = "An account with this information already exists";
+        }
+
         var status = HttpStatus.CONFLICT;
-        String message = "An account with this email already exists";
         return ResponseEntity.status(status.value()).body(new ErrorDTO(message, status.value()));
     }
 

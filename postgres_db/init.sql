@@ -31,6 +31,7 @@ CREATE TABLE users (
   role_id UUID NOT NULL,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL UNIQUE,
+  login VARCHAR(100) NOT NULL UNIQUE,
   hashed_password VARCHAR(100) NOT NULL,
   created_at timestamptz DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz,
@@ -67,11 +68,12 @@ CREATE TABLE address (
 
 -- INSERT ADMIN USER -------------------------------------
 WITH insert_user AS (
-  INSERT INTO users (role_id, name, email, hashed_password)
+  INSERT INTO users (role_id, name, email, login, hashed_password)
   VALUES (
     (SELECT id FROM roles WHERE name = 'ADMIN' LIMIT 1),
     'Admin',             
-    'admin@aifudi.com',   
+    'admin@aifudi.com',  
+    'admin',
     crypt('admin123', gen_salt('bf', 10))
   )
   RETURNING id           
@@ -90,11 +92,12 @@ FROM insert_user;
 
 -- INSERT 'USER' USER -------------------------------------
 WITH insert_user AS (
-  INSERT INTO users (role_id, name, email, hashed_password)
+  INSERT INTO users (role_id, name, email, login, hashed_password)
   VALUES (
     (SELECT id FROM roles WHERE name = 'USER' LIMIT 1),
     'Maria Santos',             
     'mariasantos@gmail.com',   
+    'mariasantos',
     crypt('maria123', gen_salt('bf', 10))
   )
   RETURNING id           

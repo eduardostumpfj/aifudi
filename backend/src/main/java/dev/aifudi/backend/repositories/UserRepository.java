@@ -10,9 +10,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository {
-    Optional<User> findAuthUser(String email);
+    Optional<User> findAuthUser(String login);
     Optional<UserProfileDTO> findById(UUID id);
     Optional<UserProfileDTO> findByEmail(String email);
+    Optional<UserProfileDTO> findByLogin(String login);
     List<UserResponseDTO> findAllByName(String name, Integer size, Integer offset);
     User save(User user);
     void delete(UUID id);
