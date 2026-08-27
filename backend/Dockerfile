@@ -25,6 +25,6 @@ RUN chown -R appuser:appgroup /app
 
 USER appuser
 
-EXPOSE 8080
+EXPOSE ${BACKEND_PORT}
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
