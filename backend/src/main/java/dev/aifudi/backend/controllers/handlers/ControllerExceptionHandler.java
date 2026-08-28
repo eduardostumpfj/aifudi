@@ -1,12 +1,10 @@
 package dev.aifudi.backend.controllers.handlers;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import dev.aifudi.backend.dtos.erros.ErrorDTO;
-import dev.aifudi.backend.dtos.erros.ValidationErrorDTO;
 import dev.aifudi.backend.services.exceptions.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -16,27 +14,38 @@ import tools.jackson.databind.exc.InvalidFormatException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorDTO> handleResourceNotFoundException (ResourceNotFoundException e){
-        var status = HttpStatus.BAD_REQUEST;
-        return ResponseEntity.status(status.value()).body(new ErrorDTO(e.getMessage(), status.value()));
+    public ProblemDetail handleResourceNotFoundException (ResourceNotFoundException error, HttpServletRequest request) {
+        return createProblem(
+                HttpStatus.BAD_REQUEST,
+                "Resource Not Found",
+                error.getMessage(),
+                request
+        );
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorDTO> handleNotFoundException (NotFoundException e){
-        var status = HttpStatus.NOT_FOUND;
-        return ResponseEntity.status(status.value()).body(new ErrorDTO(e.getMessage(), status.value()));
+    public ProblemDetail handleNotFoundException (NotFoundException error, HttpServletRequest request){
+        return createProblem(
+                HttpStatus.NOT_FOUND,
+                "Resource Not Found",
+                error.getMessage(),
+                request
+        );
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorDTO> handleAccessDeniedException (AccessDeniedException e){
-        var status = HttpStatus.FORBIDDEN;
-        return ResponseEntity.status(status.value()).body(new ErrorDTO(e.getMessage(), status.value()));
+    public ProblemDetail handleAccessDeniedException (AccessDeniedException error, HttpServletRequest request) {
+        return createProblem(
+                HttpStatus.FORBIDDEN,
+                "Not Allowed",
+                error.getMessage(),
+                request
+        );
     }
 
     @ExceptionHandler({
@@ -45,40 +54,45 @@ public class ControllerExceptionHandler {
             MissingServletRequestParameterException.class,
             InvalidParamException.class,
     })
-    public ResponseEntity<ValidationErrorDTO> handleMethodValidationException (Exception e){
-        var status = HttpStatus.BAD_REQUEST;
+    public ProblemDetail handleMethodValidationException (Exception error,  HttpServletRequest request) {
+        var problem = createProblem(
+                HttpStatus.BAD_REQUEST,
+                "Validation failed",
+                "One or more fields are invalid",
+                request
+        );
+
         List<String> errors = new ArrayList<>();
 
         // Invalid fields
-        if (e instanceof MethodArgumentNotValidException ex) {
-            for (var error : ex.getBindingResult().getFieldErrors()) {
-                errors.add(error.getField() + ": " + error.getDefaultMessage());
+        if (error instanceof MethodArgumentNotValidException ex) {
+            for (var e : ex.getBindingResult().getFieldErrors()) {
+                errors.add(e.getField() + ": " + e.getDefaultMessage());
             }
         }
 
         // Invalid role
-        if (e instanceof InvalidRegisterException ex) {
+        if (error instanceof InvalidRegisterException ex) {
             errors.add(ex.getField() + ": " + ex.getMessage());
         }
 
         // Invalid params
-        if (e instanceof MissingServletRequestParameterException ex){
+        if (error instanceof MissingServletRequestParameterException ex){
             errors.add(ex.getParameterName() + ": " + ex.getMessage());
         }
 
         // Empty param value
-        if (e instanceof InvalidParamException ex) {
+        if (error instanceof InvalidParamException ex) {
             errors.add(ex.getField() + ": " + ex.getMessage());
         }
 
+        problem.setProperty("errors", errors);
 
-        return ResponseEntity
-                .status(status)
-                .body(new ValidationErrorDTO(errors, status.value()));
+        return problem;
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
-    public ResponseEntity<ErrorDTO> handleDuplicatedEmail(DuplicateKeyException error){
+    public ProblemDetail handleDuplicated(DuplicateKeyException error, HttpServletRequest request) {
         String cause = error.getMostSpecificCause().getMessage();
         String message;
 
@@ -91,29 +105,62 @@ public class ControllerExceptionHandler {
             message = "An account with this information already exists";
         }
 
-        var status = HttpStatus.CONFLICT;
-        return ResponseEntity.status(status.value()).body(new ErrorDTO(message, status.value()));
+        return createProblem(
+                HttpStatus.CONFLICT,
+                "Duplicate resource",
+                message,
+                request
+        );
     }
 
     @ExceptionHandler(FailedAuthException.class)
-    public ResponseEntity<ErrorDTO> handleFailedAuthException (FailedAuthException error){
-        var status = HttpStatus.UNAUTHORIZED;
-        return ResponseEntity.status(status.value()).body(new ErrorDTO(error.getMessage(), status.value()));
+    public ProblemDetail handleFailedAuthException (FailedAuthException error,  HttpServletRequest request) {
+        return createProblem(
+                HttpStatus.UNAUTHORIZED,
+                "Authentication failed",
+                error.getMessage(),
+                request
+        );
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorDTO> handleInvalidRoleException (HttpMessageNotReadableException error){
+    public ProblemDetail handleInvalidRoleException (HttpMessageNotReadableException error,HttpServletRequest request){
         var status = HttpStatus.BAD_REQUEST;
         String fullMessage = error.getMostSpecificCause().getMessage();
+
         if(fullMessage.contains("roleName")){
             Throwable cause = error.getCause();
             if(cause instanceof InvalidFormatException invalid){
                Object value = invalid.getValue();
-               String errorMessage = "roleName: " + value + " is not an option";
-               return ResponseEntity.status(status.value()).body(new ErrorDTO(errorMessage, status.value()));
+
+               return createProblem(
+                        status,
+                        "Invalid request body",
+                        "roleName: " + value + " is not an option",
+                        request
+               );
             }
         }
 
-        return ResponseEntity.status(status.value()).build();
+        return createProblem(
+                status,
+                "Invalid request body",
+                "The request body is invalid",
+                request
+        );
+    }
+
+
+    private ProblemDetail createProblem(
+            HttpStatus status,
+            String title,
+            String detail,
+            HttpServletRequest request
+    ){
+        var problem = ProblemDetail.forStatusAndDetail(status, detail);
+        problem.setTitle(title);
+        problem.setInstance(java.net.URI.create(request.getRequestURI()));
+
+        return problem;
     }
 }
